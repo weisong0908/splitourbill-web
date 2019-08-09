@@ -7,6 +7,8 @@ Vue.use(VueRouter);
 
 export default new VueRouter({
     routes: [
-        { name: "dashboard", path: "/dashboard", component: Dashboard }
+        { name: "dashboard", path: "/dashboard", component: Dashboard },
+        { path: "/home", redirect: "dashboard" },
+        { path: "/", redirect: "dashboard" }
     ]
 })
