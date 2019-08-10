@@ -11,13 +11,18 @@
 				</b-tab-item>
 
 				<b-tab-item label="Recent activities">
-					a transactions table with
-					<ul>
-						<li>Name</li>
-						<li>Date time of transaction</li>
-						<li>purpose</li>
-						<li>link to detail</li>
-					</ul>
+					<b-table :data="data" :selected.sync="selectedTransaction">
+						<template slot-scope="props">
+							<b-table-column field="id" label="ID">{{ props.row.id }}</b-table-column>
+							<b-table-column field="name" label="Name">{{ props.row.name }}</b-table-column>
+							<b-table-column field="date" label="Date">{{ props.row.date }}</b-table-column>
+							<b-table-column field="purpose" label="Purpose">{{ props.row.purpose }}</b-table-column>
+							<b-table-column field="amount" label="Amount">{{ props.row.amount }}</b-table-column>
+							<b-table-column field="detail" label="Detail">
+								<b-button tag="router-link" :to="props.row.detail">Detail</b-button>
+							</b-table-column>
+						</template>
+					</b-table>
 				</b-tab-item>
 			</b-tabs>
 		</section>
@@ -33,7 +38,50 @@ export default {
 	},
 	data() {
 		return {
-			name: this.$store.state.user.name
+			name: this.$store.state.user.name,
+			data: [
+				{
+					id: 1,
+					name: "Friend 1",
+					amount: 2.5,
+					date: "2019-8-2",
+					purpose: "you paid Friend 1",
+					detail: "/detail/1"
+				},
+				{
+					id: 2,
+					name: "Friend 1",
+					amount: 4.0,
+					date: "2019-8-2",
+					purpose: "Friend 1 paid you",
+					detail: "/detail/2"
+				},
+				{
+					id: 3,
+					name: "Friend 2",
+					amount: 8.5,
+					date: "2019-8-2",
+					purpose: "you paid Friend 2",
+					detail: "/detail/3"
+				},
+				{
+					id: 4,
+					name: "Friend 3",
+					amount: 10.0,
+					date: "2019-8-2",
+					purpose: "you paid Friend 3",
+					detail: "/detail/4"
+				},
+				{
+					id: 5,
+					name: "Friend 4",
+					amount: 7.2,
+					date: "2019-8-3",
+					purpose: "you paid Friend 4",
+					detail: "/detail/5"
+				}
+			],
+			selectedTransaction: {}
 		};
 	}
 };
