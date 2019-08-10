@@ -9,8 +9,12 @@
 			</b-navbar-item>
 		</template>
 		<template slot="start">
-			<b-navbar-item href="#">Dashboard</b-navbar-item>
-			<b-navbar-item href="#">Documentation</b-navbar-item>
+			<b-navbar-item
+				tag="router-link"
+				v-for="page in pages"
+				:key="page"
+				:to="page.path"
+			>{{ page.title }}</b-navbar-item>
 		</template>
 
 		<template slot="end">
@@ -28,5 +32,7 @@
 </template>
 
 <script>
-export default {};
+export default {
+	props: ["pages"]
+};
 </script>
