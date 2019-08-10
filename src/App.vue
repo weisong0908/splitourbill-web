@@ -2,15 +2,18 @@
 	<div id="app">
 		<navbar :pages="pages"></navbar>
 		<router-view></router-view>
+		<app-footer></app-footer>
 	</div>
 </template>
 
 <script>
-import navbar from "./components/Navbar";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 export default {
 	components: {
-		navbar
+		Navbar,
+		AppFooter: Footer
 	},
 	data() {
 		return {
