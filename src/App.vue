@@ -17,7 +17,10 @@ export default {
 	},
 	data() {
 		return {
-			pages: [{ title: "Dashboard", path: "/dashboard" }]
+			pages: [
+				{ title: "Dashboard", path: "/dashboard" },
+				{ title: "Add bill", path: "/addbill" }
+			]
 		};
 	}
 };
