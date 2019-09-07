@@ -37,7 +37,7 @@
             <b-table :data="tableData" :columns="tableColumns">
                 <template slot="footer">
                     <th>
-                        <div class="th-wrap">Shared by 3 person</div>
+                        <div class="th-wrap">Shared by {{tableData.length}} person</div>
                     </th>
                     <th>
                         <div class="th-wrap">Total: {{amount}}</div>
@@ -108,6 +108,8 @@ export default {
                 ),
                 message: this.message
             };
+            alert("bill added");
+            this.$router.push("home");
         },
         addSharer() {
             this.tableData = [
