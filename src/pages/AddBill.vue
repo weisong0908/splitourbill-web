@@ -3,24 +3,12 @@
         <section>
             <b-field label="Purpose">
                 <b-select placeholder="What is this bill for?" v-model="purpose">
-                    <optgroup label="Meal">
-                        <option value="breakfast">Breakfast</option>
-                        <option value="lunch">Lunch</option>
-                        <option value="dinner">Dinner</option>
-                        <option value="snack">Snack</option>
-                        <option value="drink">Drink</option>
-                        <option value="brunch">Brunch</option>
-                        <option value="supper">Supper</option>
-                    </optgroup>
-                    <optgroup label="Activity">
-                        <option value="movie">Movie</option>
-                        <option value="singK">Sing K</option>
-                        <option value="escapeRoom">Escape room</option>
-                        <option value="workout">Workout</option>
-                    </optgroup>
-                    <optgroup label="Event">
-                        <option value="weddingBanquet">Wedding banquet</option>
-                        <option value="songka">Songka</option>
+                    <optgroup v-for="group in purposes" :key="group" :label="group.groupName">
+                        <option
+                            v-for="option in group.options"
+                            :key="option"
+                            value="option"
+                        >{{ option }}</option>
                     </optgroup>
                 </b-select>
             </b-field>
@@ -74,6 +62,25 @@ export default {
         let now = new Date();
 
         return {
+            purposes: [
+                {
+                    groupName: "Meal",
+                    options: [
+                        "Breakfast",
+                        "Lunch",
+                        "Dinner",
+                        "Supper",
+                        "Snack",
+                        "Drink",
+                        "Brunch"
+                    ]
+                },
+                {
+                    groupName: "Activity",
+                    options: ["Movie", "Sing K", "Games", "Workout"]
+                },
+                { groupName: "Event", options: ["Wedding", "Songka"] }
+            ],
             purpose: "",
             amount: "",
             dateFormat: date => date.toLocaleDateString("en-SG"),
