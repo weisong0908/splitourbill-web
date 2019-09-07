@@ -35,12 +35,27 @@
                     icon="calendar-today"
                 ></b-datepicker>
             </b-field>
+
             <b-field label="Select a time">
                 <b-timepicker v-model="time" placeholder="Click to select..." icon="clock"></b-timepicker>
             </b-field>
             <b-field label="Message">
                 <b-input type="textarea" v-model="message"></b-input>
             </b-field>
+            <b-field label="Split the bill with..."></b-field>
+            <b-field>
+                <b-button @click="addSharer">Add person</b-button>
+            </b-field>
+            <b-table :data="tableData" :columns="tableColumns">
+                <template slot="footer">
+                    <th>
+                        <div class="th-wrap">Shared by 3 person</div>
+                    </th>
+                    <th>
+                        <div class="th-wrap">Total: {{amount}}</div>
+                    </th>
+                </template>
+            </b-table>
             <b-field>
                 <b-button type="is-primary" @click="addBill">Add bill</b-button>
             </b-field>
@@ -64,7 +79,16 @@ export default {
             dateFormat: date => date.toLocaleDateString("en-SG"),
             date: now,
             time: now,
-            message: "A new bill"
+            message: "A new bill",
+            tableData: [
+                { name: "You", amount: 1 },
+                { name: "Friend 2", amount: 3 },
+                { name: "Friend 3", amount: 4 }
+            ],
+            tableColumns: [
+                { field: "name", label: "Name" },
+                { field: "amount", label: "Amount" }
+            ]
         };
     },
     methods: {
@@ -77,6 +101,12 @@ export default {
                 ),
                 message: this.message
             };
+        },
+        addSharer() {
+            this.tableData = [
+                ...this.tableData,
+                { name: "New friend", amount: 0 }
+            ];
         }
     }
 };
