@@ -1,11 +1,11 @@
 export default {
-    GetTransactions(count) {
+    getTransactions(count) {
         let result = fakeTransactions.slice(0, count);
         return new Promise(resolve => {
             resolve({ data: result });
         })
     },
-    GetTransaction(id) {
+    getTransaction(id) {
         let result = fakeTransactions.filter(t => t.id == id)[0];
         return new Promise((resolve, reject) => {
             if (result == null)

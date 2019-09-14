@@ -3,8 +3,8 @@
 		<section>
 			<b-field label="Purpose">
 				<b-select placeholder="What is this bill for?" v-model="purpose">
-					<optgroup v-for="group in purposes" :key="group" :label="group.groupName">
-						<option v-for="option in group.options" :key="option" value="option">{{ option }}</option>
+					<optgroup v-for="group in purposes" :key="group.groupName" :label="group.groupName">
+						<option v-for="option in group.options" :key="option" :value="option">{{ option }}</option>
 					</optgroup>
 				</b-select>
 			</b-field>
@@ -49,6 +49,7 @@
 
 <script>
 import page from "../components/Page";
+import configurationService from "../services/configurationService";
 
 export default {
 	components: {
@@ -58,25 +59,7 @@ export default {
 		let now = new Date();
 
 		return {
-			purposes: [
-				{
-					groupName: "Meal",
-					options: [
-						"Breakfast",
-						"Lunch",
-						"Dinner",
-						"Supper",
-						"Snack",
-						"Drink",
-						"Brunch"
-					]
-				},
-				{
-					groupName: "Activity",
-					options: ["Movie", "Sing K", "Games", "Workout"]
-				},
-				{ groupName: "Event", options: ["Wedding", "Songka"] }
-			],
+			purposes: [],
 			purpose: "",
 			amount: "",
 			dateFormat: date => date.toLocaleDateString("en-SG"),
@@ -113,6 +96,11 @@ export default {
 				{ name: "New friend", amount: 0 }
 			];
 		}
+	},
+	created() {
+		configurationService.getBillPurposes().then(resp => {
+			this.purposes = [...resp.data];
+		});
 	}
 };
 </script>

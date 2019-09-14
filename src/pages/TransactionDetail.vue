@@ -28,7 +28,7 @@ export default {
 	methods: {
 		displayTransactionDetail(id) {
 			transactionService
-				.GetTransaction(id)
+				.getTransaction(id)
 				.then(resp => {
 					this.transaction = { ...resp.data };
 				})
