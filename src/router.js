@@ -12,7 +12,7 @@ export default new VueRouter({
 	routes: [
 		{ name: "dashboard", path: "/dashboard", component: Dashboard },
 		{ path: "/home", redirect: "dashboard" },
-		{ name: "transactionDetail", path: "/detail/:id", component: TransactionDetail },
+		{ name: "transactionDetail", path: "/detail/:transactionCode", component: TransactionDetail },
 		{ name: "addBill", path: "/addbill", component: AddBill },
 		{ name: "editBill", path: "/editbill", component: EditBill },
 		{ path: "/", redirect: "dashboard" }

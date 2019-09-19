@@ -1,47 +1,55 @@
 <template>
-	<page title="Transaction detail">
-		<p>Transaction id: {{transaction.id}}</p>
-		<p>Transaction to: {{transaction.name}}</p>
-		<p>Amount: {{transaction.amount}}</p>
-		<p>Date: {{transaction.date}}</p>
-		<p>Purpose: {{transaction.purpose}}</p>
-		<p>Before: Friend1 owes you: 21.50</p>
-		<p>After: Friend1 owes you: 20.00</p>
-	</page>
+    <page title="Transaction detail">
+        <p>Transaction code: {{transaction.transactionCode}}</p>
+        <p>Transaction from: {{transaction.from.username}}</p>
+        <p>Transaction to: {{transaction.to.username}}</p>
+        <p>Amount: {{transaction.amount}}</p>
+        <p>Date: {{transaction.date}}</p>
+        <p>Purpose: {{transaction.purpose}}</p>
+        <p>Type: {{transaction.type}}</p>
+        <p>Remarks: {{transaction.remarks}}</p>
+    </page>
 </template>
-
 
 <script>
 import page from "../components/Page";
 import transactionService from "../services/transactionService";
 
 export default {
-	components: {
-		page
-	},
-	data() {
-		return {
-			test: "124",
-			transaction: {}
-		};
-	},
-	methods: {
-		displayTransactionDetail(id) {
-			transactionService
-				.getTransaction(id)
-				.then(resp => {
-					this.transaction = { ...resp.data };
-				})
-				.catch(error => {
-					console.error(error);
-				});
-		}
-	},
-	created() {
-		this.displayTransactionDetail(this.$route.params.id);
-	},
-	beforeRouteUpdate(to, from, next) {
-		this.displayTransactionDetail(to.params.id);
-	}
+    components: {
+        page
+    },
+    data() {
+        return {
+            transaction: {
+                from: { id: 0, username: "" },
+                to: { id: 0, username: "" },
+                transactionCode: "",
+                amount: "",
+                date: "",
+                purpose: "",
+                remarks: "",
+                type: ""
+            }
+        };
+    },
+    methods: {
+        displayTransactionDetail(transactionCode) {
+            transactionService
+                .getTransaction(transactionCode)
+                .then(resp => {
+                    this.transaction = { ...resp.data };
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    },
+    created() {
+        this.displayTransactionDetail(this.$route.params.transactionCode);
+    },
+    beforeRouteUpdate(to, from, next) {
+        this.displayTransactionDetail(to.params.transactionCode);
+    }
 };
 </script>
