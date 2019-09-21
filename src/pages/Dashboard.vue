@@ -10,6 +10,26 @@
                     </ul>
                 </b-tab-item>
 
+                <b-tab-item label="Recent bills">
+                    <b-table :data="bills">
+                        <template slot-scope="props">
+                            <b-table-column
+                                label="Date"
+                            >{{ props.row.datetime.toLocaleString("en-SG") }}</b-table-column>
+                            <b-table-column label="Purpose">{{ props.row.purpose }}</b-table-column>
+                            <b-table-column label="Total Amount">{{ props.row.totalAmount }}</b-table-column>
+                            <b-table-column label="Detail">
+                                <b-button
+                                    type="is-primary"
+                                    inverted
+                                    tag="router-link"
+                                    :to="'bill/' + props.row.id"
+                                >Detail</b-button>
+                            </b-table-column>
+                        </template>
+                    </b-table>
+                </b-tab-item>
+
                 <b-tab-item label="Recent activities">
                     <b-table :data="data" :selected.sync="selectedTransaction">
                         <template slot-scope="props">
@@ -40,6 +60,7 @@
 <script>
 import page from "../components/Page";
 import transactionService from "../services/transactionService";
+import billService from "../services/billService";
 
 export default {
     components: {
@@ -47,15 +68,19 @@ export default {
     },
     data() {
         return {
-            name: this.$store.state.user.name,
+            name: this.$store.state.user.username,
             data: [],
-            selectedTransaction: {}
+            selectedTransaction: {},
+            bills: []
         };
     },
     created() {
+        billService.getBills(10).then(resp => {
+            this.bills = [...resp.data];
+        });
+
         transactionService.getTransactions(10).then(resp => {
             this.data = [...resp.data];
-            console.log(resp);
         });
     }
 };

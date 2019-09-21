@@ -6,7 +6,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
 	state: {
 		user: {
-			name: "WS"
+			id: 1,
+			username: "WS"
 		},
 		notifications: [
 			{

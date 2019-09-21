@@ -14,7 +14,11 @@ export default {
 	},
 	addTransactions(transactions) {
 		transactions.forEach(transaction => {
-			fakeTransactions.push({ transactionCode: fakeTransactions.length + 1, ...transaction });
+			fakeTransactions.push({
+				id: fakeTransactions.length + 1,
+				transactionCode: fakeTransactions.length + 1,
+				...transaction
+			});
 		});
 
 		return new Promise(resolve => {
@@ -25,6 +29,7 @@ export default {
 
 let fakeTransactions = [
 	{
+		id: 1,
 		from: { id: 1, username: "User 1" },
 		to: { id: 2, username: "User 2" },
 		transactionCode: "1",
@@ -35,6 +40,7 @@ let fakeTransactions = [
 		type: "Request"
 	},
 	{
+		id: 2,
 		from: { id: 1, username: "User 1" },
 		to: { id: 2, username: "User 2" },
 		transactionCode: "2",
@@ -45,6 +51,7 @@ let fakeTransactions = [
 		type: "Request"
 	},
 	{
+		id: 3,
 		from: { id: 1, username: "User 1" },
 		to: { id: 3, username: "User 3" },
 		transactionCode: "3",
@@ -55,6 +62,7 @@ let fakeTransactions = [
 		type: "Request"
 	},
 	{
+		id: 4,
 		from: { id: 1, username: "User 1" },
 		to: { id: 4, username: "User 4" },
 		transactionCode: "4",
@@ -65,6 +73,7 @@ let fakeTransactions = [
 		type: "Pay"
 	},
 	{
+		id: 5,
 		from: { id: 2, username: "User 2" },
 		to: { id: 1, username: "User 1" },
 		transactionCode: "5",

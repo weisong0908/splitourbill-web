@@ -1,8 +1,8 @@
 <template>
-    <page title="Add a bill">
+    <page :title="pageTitle">
         <section>
             <b-field label="Purpose">
-                <b-select placeholder="What is this bill for?" v-model="purpose">
+                <b-select placeholder="What is this bill for?" v-model="billData.purpose">
                     <optgroup
                         v-for="group in purposes"
                         :key="group.groupName"
@@ -16,12 +16,12 @@
                     </optgroup>
                 </b-select>
             </b-field>
-            <b-field label="Amount">
-                <b-input v-model="amount" type="number"></b-input>
+            <b-field label="Total amount">
+                <b-input v-model="billData.totalAmount" type="number"></b-input>
             </b-field>
             <b-field label="Select a date">
                 <b-datepicker
-                    v-model="date"
+                    v-model="billData.datetime"
                     :date-formatter="dateFormat"
                     placeholder="Click to select..."
                     icon="calendar-today"
@@ -29,27 +29,38 @@
             </b-field>
 
             <b-field label="Select a time">
-                <b-timepicker v-model="time" placeholder="Click to select..." icon="clock"></b-timepicker>
+                <b-timepicker
+                    v-model="billData.datetime"
+                    placeholder="Click to select..."
+                    icon="clock"
+                ></b-timepicker>
             </b-field>
             <b-field label="Remarks">
-                <b-input type="textarea" v-model="remarks"></b-input>
+                <b-input type="textarea" v-model="billData.remarks"></b-input>
             </b-field>
             <b-field label="Split the bill with..."></b-field>
             <b-field>
                 <b-button @click="addSharer">Add person</b-button>
             </b-field>
-            <b-table :data="sharers" :columns="tableColumns">
+            <b-table :data="billData.requests">
+                <template slot-scope="props">
+                    <b-table-column label="Name">{{ props.row.user.username }}</b-table-column>
+                    <b-table-column label="Amount">
+                        <b-input v-model="props.row.amount" type="number"></b-input>
+                    </b-table-column>
+                </template>
+
                 <template slot="footer">
                     <th>
-                        <div class="th-wrap">Shared by {{sharers.length}} person</div>
+                        <div class="th-wrap">You will pay the balance of</div>
                     </th>
                     <th>
-                        <div class="th-wrap">Total: {{amount}}</div>
+                        <div class="th-wrap">{{balanceAmount}}</div>
                     </th>
                 </template>
             </b-table>
             <b-field>
-                <b-button type="is-primary" @click="addBill">Add bill</b-button>
+                <b-button type="is-primary" @click="submitBill">{{submitButtonLabel}}</b-button>
             </b-field>
         </section>
     </page>
@@ -58,7 +69,7 @@
 <script>
 import page from "../components/Page";
 import configurationService from "../services/configurationService";
-import transactionService from "../services/transactionService";
+import billService from "../services/billService";
 
 export default {
     components: {
@@ -68,41 +79,28 @@ export default {
         let now = new Date();
 
         return {
+            pageTitle: "Add a bill",
             purposes: [],
-            purpose: "",
-            amount: "",
             dateFormat: date => date.toLocaleDateString("en-SG"),
-            date: now,
-            time: now,
-            remarks: "A new bill",
-            sharers: [
-                { id: 1, username: "User 1 (Me)", amount: 1 },
-                { id: 2, username: "User 2", amount: 3 },
-                { id: 3, username: "User 3", amount: 4 }
-            ],
-            tableColumns: [
-                { field: "username", label: "Name" },
-                { field: "amount", label: "Amount" }
-            ]
+            submitButtonLabel: "Add bill",
+            billData: {
+                id: "",
+                requestor: {
+                    id: this.$store.state.user.id,
+                    username: this.$store.state.user.username
+                },
+                purpose: "",
+                totalAmount: "",
+                datetime: now,
+                remarks: "",
+                requests: []
+            }
         };
     },
     methods: {
-        addBill() {
-            let transactions = this.sharers.map(sharer => {
-                let transaction = {
-                    from: { id: 1 },
-                    to: { id: sharer.id },
-                    purpose: this.purpose,
-                    date: this.date,
-                    type: "Request",
-                    remarks: this.message,
-                    amount: sharer.amount
-                };
-                return transaction;
-            });
-
-            transactionService
-                .addTransactions(transactions)
+        submitBill() {
+            billService
+                .addBill(this.billData)
                 .then(resp => {
                     this.$buefy.snackbar.open({
                         message: "Bill added!",
@@ -112,11 +110,14 @@ export default {
 
                     this.$store.commit("addNotification", {
                         title: "Bill added on ...",
-                        message: "A bill of " + this.amount + " was added",
+                        message:
+                            "A bill of " +
+                            this.billData.totalAmount +
+                            " was added",
                         type: "success"
                     });
 
-                    this.$router.push("home");
+                    this.$router.push({ name: "dashboard" });
                 })
                 .catch(resp => {
                     this.$buefy.snackbar.open({
@@ -128,19 +129,41 @@ export default {
 
                     this.$store.commit("addNotification", {
                         title: "Bill was not added on ...",
-                        message: "A bill of " + this.amount + " was not added",
+                        message:
+                            "A bill of " +
+                            this.billData.totalAmount +
+                            " was not added",
                         type: "failure"
                     });
                 });
         },
         addSharer() {
-            this.sharers = [
-                ...this.sharers,
-                { id: 4, username: "User 4", amount: 0 }
+            this.billData.requests = [
+                ...this.billData.requests,
+                { user: { id: 4, username: "User 4" }, amount: 0 }
             ];
         }
     },
+    computed: {
+        balanceAmount() {
+            let amountPaidByOtherUsers = 0;
+
+            this.billData.requests.map(r => {
+                amountPaidByOtherUsers += Number(r.amount);
+            });
+
+            return this.billData.totalAmount - amountPaidByOtherUsers;
+        }
+    },
     created() {
+        if (this.$route.params.id) {
+            billService.getBill(this.$route.params.id).then(resp => {
+                this.billData = { ...resp.data };
+                this.pageTitle = "Update bill " + this.$route.params.id;
+                this.submitButtonLabel = "Update bill";
+            });
+        }
+
         configurationService.getBillPurposes().then(resp => {
             this.purposes = [...resp.data];
         });
