@@ -68,6 +68,7 @@
 
 <script>
 import page from "../components/Page";
+import pageMixin from "../mixins/page";
 import configurationService from "../services/configurationService";
 import billService from "../services/billService";
 
@@ -75,6 +76,7 @@ export default {
     components: {
         page
     },
+    mixins: [pageMixin],
     data() {
         let now = new Date();
 
@@ -102,38 +104,23 @@ export default {
             billService
                 .addBill(this.billData)
                 .then(resp => {
-                    this.$buefy.snackbar.open({
-                        message: "Bill added!",
-                        position: "is-top",
-                        type: "is-success"
-                    });
-
-                    this.$store.commit("addNotification", {
-                        title: "Bill added on ...",
+                    this.notify({
+                        title: "Bill added successfully",
                         message:
-                            "A bill of " +
+                            "A bill of SGD " +
                             this.billData.totalAmount +
                             " was added",
-                        type: "success"
+                        type: "is-success"
                     });
 
                     this.$router.push({ name: "dashboard" });
                 })
                 .catch(resp => {
-                    this.$buefy.snackbar.open({
+                    this.notify({
+                        title: "Error adding bill",
                         message:
                             "There is error adding the bill, please try again.",
-                        position: "is-top",
                         type: "is-danger"
-                    });
-
-                    this.$store.commit("addNotification", {
-                        title: "Bill was not added on ...",
-                        message:
-                            "A bill of " +
-                            this.billData.totalAmount +
-                            " was not added",
-                        type: "failure"
                     });
                 });
         },
