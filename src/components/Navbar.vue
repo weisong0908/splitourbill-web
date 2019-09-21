@@ -24,7 +24,8 @@
                     <b-button
                         :type="notificationButtonType"
                         slot="trigger"
-                        icon-right="menu-down"
+                        icon-left="bell"
+                        size="is-small"
                         rounded
                     >{{notifications.length}}</b-button>
                     <b-dropdown-item v-for="(notification, index) in notifications" :key="index">
