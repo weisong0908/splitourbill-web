@@ -8,6 +8,7 @@
                 />
             </b-navbar-item>
         </template>
+
         <template slot="start">
             <b-navbar-item
                 tag="router-link"
@@ -19,8 +20,29 @@
 
         <template slot="end">
             <b-navbar-item tag="div">
+                <b-dropdown hoverable>
+                    <b-button
+                        :type="notificationButtonType"
+                        slot="trigger"
+                        icon-right="menu-down"
+                        rounded
+                    >{{notifications.length}}</b-button>
+                    <b-dropdown-item v-for="(notification, index) in notifications" :key="index">
+                        <div class="media">
+                            <b-icon
+                                class="media-left"
+                                :icon="notification.type=='success'? 'check-circle-outline':'close-circle-outline'"
+                            ></b-icon>
+                            <div class="media-content">
+                                <h3>{{notification.title}}</h3>
+                                <small>{{notification.message}}</small>
+                            </div>
+                        </div>
+                    </b-dropdown-item>
+                </b-dropdown>
+            </b-navbar-item>
+            <b-navbar-item tag="div">
                 <div class="buttons">
-                    <b-button type="is-primary" tag="a">1</b-button>
                     <a class="button is-primary">
                         <strong>Sign up</strong>
                     </a>
@@ -33,6 +55,16 @@
 
 <script>
 export default {
-    props: ["pages"]
+    props: ["pages"],
+    data() {
+        return {
+            notifications: this.$store.state.notifications
+        };
+    },
+    computed: {
+        notificationButtonType() {
+            return this.notifications.length == 0 ? "is-light" : "is-warning";
+        }
+    }
 };
 </script>

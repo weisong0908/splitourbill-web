@@ -101,9 +101,37 @@ export default {
                 return transaction;
             });
 
-            transactionService.addTransactions(transactions);
+            transactionService
+                .addTransactions(transactions)
+                .then(resp => {
+                    this.$buefy.snackbar.open({
+                        message: "Bill added!",
+                        position: "is-top",
+                        type: "is-success"
+                    });
 
-            this.$router.push("home");
+                    this.$store.commit("addNotification", {
+                        title: "Bill added on ...",
+                        message: "A bill of " + this.amount + " was added",
+                        type: "success"
+                    });
+
+                    this.$router.push("home");
+                })
+                .catch(resp => {
+                    this.$buefy.snackbar.open({
+                        message:
+                            "There is error adding the bill, please try again.",
+                        position: "is-top",
+                        type: "is-danger"
+                    });
+
+                    this.$store.commit("addNotification", {
+                        title: "Bill was not added on ...",
+                        message: "A bill of " + this.amount + " was not added",
+                        type: "failure"
+                    });
+                });
         },
         addSharer() {
             this.sharers = [

@@ -16,6 +16,10 @@ export default {
 		transactions.forEach(transaction => {
 			fakeTransactions.push({ transactionCode: fakeTransactions.length + 1, ...transaction });
 		});
+
+		return new Promise(resolve => {
+			resolve();
+		});
 	}
 };
 
