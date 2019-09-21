@@ -1,5 +1,6 @@
 <template>
     <div>
+        <login-form></login-form>
         <b-message title="Warning" type="is-warning" has-icon>This page is under development</b-message>
         <div class="tile is-vertical is-ancestor">
             <div class="tile is-parent">
@@ -18,11 +19,13 @@
 </template>
 
 <script>
+import LoginForm from "../components/LoginForm";
 import pageMixin from "../mixins/page";
 
 export default {
     props: ["title", "subtitle"],
     mixins: [pageMixin],
+    components: { LoginForm },
     data() {
         return {};
     }

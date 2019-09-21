@@ -1,11 +1,13 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import { stat } from "fs";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
-		user: {
+		isUserLoggedIn: false,
+		userInfo: {
 			id: 1,
 			username: "WS"
 		},
@@ -28,6 +30,14 @@ export default new Vuex.Store({
 		]
 	},
 	mutations: {
+		logIn(state, userInfo) {
+			state.userInfo = userInfo;
+			state.isUserLoggedIn = true;
+		},
+		logOut(state) {
+			state.userInfo = {};
+			state.isUserLoggedIn = false;
+		},
 		addNotification(state, notification) {
 			state.notifications.unshift(notification);
 		}

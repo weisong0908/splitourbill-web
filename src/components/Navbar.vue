@@ -44,10 +44,13 @@
             </b-navbar-item>
             <b-navbar-item tag="div">
                 <div class="buttons">
-                    <a class="button is-primary">
+                    <a class="button is-light">
                         <strong>Sign up</strong>
                     </a>
-                    <a class="button is-light">Log in</a>
+                    <a
+                        class="button is-light"
+                        @click="logInOrOut"
+                    >{{isUserLoggedIn? "Log out":"Log in"}}</a>
                 </div>
             </b-navbar-item>
         </template>
@@ -65,6 +68,16 @@ export default {
     computed: {
         notificationButtonType() {
             return this.notifications.length == 0 ? "is-light" : "is-warning";
+        },
+        isUserLoggedIn() {
+            return this.$store.state.isUserLoggedIn;
+        }
+    },
+    methods: {
+        logInOrOut() {
+            if (this.isUserLoggedIn) {
+                this.$store.commit("logOut");
+            }
         }
     }
 };

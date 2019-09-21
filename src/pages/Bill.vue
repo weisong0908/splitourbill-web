@@ -88,8 +88,8 @@ export default {
             billData: {
                 id: "",
                 requestor: {
-                    id: this.$store.state.user.id,
-                    username: this.$store.state.user.username
+                    id: this.$store.state.userInfo.id,
+                    username: this.$store.state.userInfo.username
                 },
                 purpose: "",
                 totalAmount: "",

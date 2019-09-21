@@ -68,7 +68,7 @@ export default {
     },
     data() {
         return {
-            name: this.$store.state.user.username,
+            name: this.$store.state.userInfo.username,
             data: [],
             selectedTransaction: {},
             bills: []
