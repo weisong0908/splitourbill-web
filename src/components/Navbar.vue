@@ -1,5 +1,5 @@
 <template>
-    <b-navbar>
+    <b-navbar :close-on-click="true" type="is-light">
         <template slot="brand">
             <b-navbar-item href="/">
                 <img
@@ -28,8 +28,12 @@
                         size="is-small"
                         rounded
                     >{{notifications.length}}</b-button>
-                    <b-dropdown-item v-for="(notification, index) in notifications" :key="index">
-                        <div class="media">
+                    <b-dropdown-item
+                        v-for="(notification, index) in notifications"
+                        :key="index"
+                        paddingless
+                    >
+                        <div class="media navbar-item">
                             <b-icon
                                 class="media-left"
                                 :icon="notification.type=='is-success'? 'check-circle-outline':'close-circle-outline'"
@@ -43,15 +47,25 @@
                 </b-dropdown>
             </b-navbar-item>
             <b-navbar-item tag="div">
-                <div class="buttons">
-                    <a class="button is-light" v-if="!isUserLoggedIn" @click="signUp">
-                        <strong>Sign up</strong>
-                    </a>
-                    <a
-                        class="button is-light"
-                        @click="logInOrOut"
-                    >{{isUserLoggedIn? "Log out":"Log in"}}</a>
-                </div>
+                <b-dropdown hoverable>
+                    <b-button slot="trigger" type="is-light" icon-left="account-circle">Account</b-button>
+                    <b-dropdown-item custom v-if="isUserLoggedIn">
+                        <small>
+                            Logged in as
+                            <br />
+                        </small>
+                        <b>{{username}}</b>
+                    </b-dropdown-item>
+                    <hr class="dropdown-divider" separator v-if="isUserLoggedIn" />
+                    <b-dropdown-item class="navbar-item" v-if="isUserLoggedIn">
+                        <b-icon icon="settings"></b-icon>
+                        <span>&nbsp;Preferences</span>
+                    </b-dropdown-item>
+                    <b-dropdown-item class="navbar-item" @click="logInOrOut">
+                        <b-icon :icon="isUserLoggedIn? 'logout':'login'"></b-icon>
+                        <span>&nbsp;{{isUserLoggedIn? "Log out":"Log in"}}</span>
+                    </b-dropdown-item>
+                </b-dropdown>
             </b-navbar-item>
         </template>
     </b-navbar>
@@ -71,13 +85,18 @@ export default {
         },
         isUserLoggedIn() {
             return this.$store.state.isUserLoggedIn;
+        },
+        username() {
+            return this.isUserLoggedIn
+                ? this.$store.state.userInfo.username
+                : "-";
         }
     },
     methods: {
         logInOrOut() {
             if (this.isUserLoggedIn) {
                 this.$store.commit("logOut");
-            }
+            } else this.$router.push({ name: "dashboard" });
         },
         signUp() {
             this.$router.push({ name: "signUp" });
