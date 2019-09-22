@@ -56,6 +56,11 @@ export default {
         signUp() {
             this.$router.push({ name: "signUp" });
         }
+    },
+    created() {
+        this.username = "WS";
+        this.password = "WS";
+        this.logIn();
     }
 };
 </script>
