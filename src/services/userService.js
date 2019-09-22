@@ -17,6 +17,22 @@ export default {
 				resolve({ data: userInfo });
 			} else reject("user not found, wrong username and/or password.");
 		});
+	},
+
+	/**
+	 * @param {Object} userInfo
+	 * @param {String} userInfo.username
+	 * @param {String} userInfo.email
+	 * @param {String} userInfo.password
+	 * @returns {Promise} The userInfo with id, username
+	 */
+	addNewUser(userInfo) {
+		let data = { ...userInfo };
+		data.id = fakeUsers.length + 1;
+		fakeUsers.push(data);
+		return new Promise(resolve => {
+			resolve({ data });
+		});
 	}
 };
 

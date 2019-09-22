@@ -13,8 +13,8 @@
                 </b-field>
             </div>
             <div class="modal-card-foot">
-                <b-button type="is-primary" @click="login">Log in</b-button>
-                <b-button>Sign up</b-button>
+                <b-button type="is-primary" @click="logIn">Log in</b-button>
+                <b-button @click="signUp">Sign up</b-button>
             </div>
         </div>
     </b-modal>
@@ -33,11 +33,14 @@ export default {
     },
     computed: {
         isLoginFormShown() {
-            return !this.$store.state.isUserLoggedIn;
+            return (
+                !this.$store.state.isUserLoggedIn &&
+                !this.$store.state.isUserOnSignUpPage
+            );
         }
     },
     methods: {
-        login() {
+        logIn() {
             userService
                 .authenticate({
                     username: this.username,
@@ -49,6 +52,9 @@ export default {
                 .catch(resp => {
                     alert(resp);
                 });
+        },
+        signUp() {
+            this.$router.push({ name: "signUp" });
         }
     }
 };

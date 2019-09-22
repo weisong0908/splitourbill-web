@@ -5,7 +5,7 @@ export default {
 		 * @param {Object} notification The notification message object
 		 * @param {String} notification.title The title of the notification message
 		 * @param {String} notification.message The body of the notification message
-		 * @param {String} notification.type The type of the notification message
+		 * @param {String} notification.type The type of the notification message ("is-success", or "is-danger")
 		 */
 		notify(notification) {
 			this.$buefy.snackbar.open({

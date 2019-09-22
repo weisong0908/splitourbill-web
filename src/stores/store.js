@@ -6,9 +6,10 @@ Vue.use(Vuex);
 export default new Vuex.Store({
 	state: {
 		isUserLoggedIn: false,
+		isUserOnSignUpPage: false,
 		userInfo: {
-			id: 1,
-			username: "WS"
+			id: "",
+			username: ""
 		},
 		notifications: [
 			{
@@ -32,6 +33,7 @@ export default new Vuex.Store({
 		logIn(state, userInfo) {
 			state.userInfo = userInfo;
 			state.isUserLoggedIn = true;
+			state.isUserOnSignUpPage = false;
 		},
 		logOut(state) {
 			state.userInfo = {};
@@ -39,6 +41,9 @@ export default new Vuex.Store({
 		},
 		addNotification(state, notification) {
 			state.notifications.unshift(notification);
+		},
+		userIsOnSignUpPage(state, payload) {
+			state.isUserOnSignUpPage = payload;
 		}
 	}
 });

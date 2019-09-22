@@ -32,7 +32,7 @@
                         <div class="media">
                             <b-icon
                                 class="media-left"
-                                :icon="notification.type=='success'? 'check-circle-outline':'close-circle-outline'"
+                                :icon="notification.type=='is-success'? 'check-circle-outline':'close-circle-outline'"
                             ></b-icon>
                             <div class="media-content">
                                 <h3>{{notification.title}}</h3>
@@ -44,7 +44,7 @@
             </b-navbar-item>
             <b-navbar-item tag="div">
                 <div class="buttons">
-                    <a class="button is-light">
+                    <a class="button is-light" v-if="!isUserLoggedIn" @click="signUp">
                         <strong>Sign up</strong>
                     </a>
                     <a
@@ -78,6 +78,9 @@ export default {
             if (this.isUserLoggedIn) {
                 this.$store.commit("logOut");
             }
+        },
+        signUp() {
+            this.$router.push({ name: "signUp" });
         }
     }
 };
