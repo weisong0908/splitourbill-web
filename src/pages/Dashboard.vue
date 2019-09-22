@@ -2,7 +2,7 @@
     <page title="Dashboard" subtitle="Overview">
         <p>Hello {{ name }}</p>
         <section>
-            <b-tabs position="is-centered" type="is-toggle" expanded>
+            <b-tabs position="is-centered" type="is-toggle" size="is-small" expanded>
                 <b-tab-item label="Overview">
                     <ul>
                         <li>You owe</li>

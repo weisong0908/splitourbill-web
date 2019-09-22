@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <section class="section">
         <login-form></login-form>
         <b-message title="Warning" type="is-warning" has-icon>This page is under development</b-message>
         <div class="tile is-vertical is-ancestor">
@@ -15,7 +15,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </template>
 
 <script>

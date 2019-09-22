@@ -42,26 +42,28 @@
             <b-field>
                 <b-button @click="addSharer">Add person</b-button>
             </b-field>
-            <b-table :data="billData.requests">
-                <template slot-scope="props">
-                    <b-table-column label="Name">{{ props.row.user.username }}</b-table-column>
-                    <b-table-column label="Amount">
-                        <b-input v-model="props.row.amount" type="number"></b-input>
-                    </b-table-column>
-                </template>
-
-                <template slot="footer">
-                    <th>
-                        <div class="th-wrap">You will pay the balance of</div>
-                    </th>
-                    <th>
-                        <div class="th-wrap">{{balanceAmount}}</div>
-                    </th>
-                </template>
-            </b-table>
             <b-field>
-                <b-button type="is-primary" @click="submitBill">{{submitButtonLabel}}</b-button>
+                <b-table :data="billData.requests">
+                    <template slot-scope="props">
+                        <b-table-column label="Name">{{ props.row.user.username }}</b-table-column>
+                        <b-table-column label="Amount">
+                            <b-input v-model="props.row.amount" type="number"></b-input>
+                        </b-table-column>
+                    </template>
+
+                    <template slot="footer">
+                        <th>
+                            <div class="th-wrap">You will pay the balance of</div>
+                        </th>
+                        <th>
+                            <div class="th-wrap">{{balanceAmount}}</div>
+                        </th>
+                    </template>
+                </b-table>
             </b-field>
+            <div class="buttons">
+                <b-button type="is-primary" @click="submitBill">{{submitButtonLabel}}</b-button>
+            </div>
         </section>
     </page>
 </template>
