@@ -21,12 +21,14 @@
 </template>
 
 <script>
+import userService from "../services/userService";
+
 export default {
     data() {
         return {
             show: !this.$store.state.isUserLoggedIn,
-            username: "ws",
-            password: "ws"
+            username: "WS",
+            password: "WS"
         };
     },
     computed: {
@@ -36,12 +38,17 @@ export default {
     },
     methods: {
         login() {
-            let userInfo = {
-                id: 1,
-                username: "WS"
-            };
-
-            this.$store.commit("logIn", userInfo);
+            userService
+                .authenticate({
+                    username: this.username,
+                    password: this.password
+                })
+                .then(resp => {
+                    this.$store.commit("logIn", resp.data);
+                })
+                .catch(resp => {
+                    alert(resp);
+                });
         }
     }
 };
