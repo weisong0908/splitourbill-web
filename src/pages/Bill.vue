@@ -1,8 +1,8 @@
 <template>
     <page :title="pageTitle">
-        <section>
+        <form @submit.prevent="submitBill">
             <b-field label="Purpose">
-                <b-select placeholder="What is this bill for?" v-model="billData.purpose">
+                <b-select placeholder="What is this bill for?" v-model="billData.purpose" required>
                     <optgroup
                         v-for="group in purposes"
                         :key="group.groupName"
@@ -16,8 +16,8 @@
                     </optgroup>
                 </b-select>
             </b-field>
-            <b-field label="Total amount">
-                <b-input v-model="billData.totalAmount" type="number"></b-input>
+            <b-field label="Total amount (SGD)">
+                <b-input v-model="billData.totalAmount" type="number" required min="0" step="0.01"></b-input>
             </b-field>
             <b-field label="Select a date">
                 <b-datepicker
@@ -33,6 +33,8 @@
                     v-model="billData.datetime"
                     placeholder="Click to select..."
                     icon="clock"
+                    inline
+                    hour-format="12"
                 ></b-timepicker>
             </b-field>
             <b-field label="Remarks">
@@ -62,9 +64,9 @@
                 </b-table>
             </b-field>
             <div class="buttons">
-                <b-button type="is-primary" @click="submitBill">{{submitButtonLabel}}</b-button>
+                <button class="button is-primary" type="submit">{{submitButtonLabel}}</button>
             </div>
-        </section>
+        </form>
     </page>
 </template>
 
