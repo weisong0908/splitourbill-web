@@ -1,23 +1,36 @@
 <template>
     <page title="Welcome, new user!" :subtitle="temp">
-        <section>
+        <p>is form valid? {{isFormValid}}</p>
+        <form action="submit" @submit="signUp">
             <b-field label="Email">
                 <b-input v-model="email" type="email" required></b-input>
             </b-field>
             <b-field label="Username">
-                <b-input v-model="username" required></b-input>
+                <b-input v-model="username" required minlength="4" maxlength="50"></b-input>
             </b-field>
             <b-field label="Password">
-                <b-input v-model="password" type="password" required></b-input>
+                <b-input
+                    v-model="password"
+                    type="password"
+                    required
+                    minlength="8"
+                    autocomplete="new-password"
+                ></b-input>
             </b-field>
             <b-field label="Confirm password">
-                <b-input v-model="cofirmedPassword" type="password" required></b-input>
+                <b-input
+                    v-model="cofirmedPassword"
+                    type="password"
+                    required
+                    :pattern="password"
+                    validation-message="Passwords do not match"
+                ></b-input>
             </b-field>
             <div class="buttons">
-                <b-button type="is-primary" @click="signUp">Sign Up</b-button>
+                <button class="button is-primary" type="submit">Sign up</button>
                 <b-button type="is-primary" @click="cancel">Cancel</b-button>
             </div>
-        </section>
+        </form>
     </page>
 </template>
 
@@ -37,7 +50,8 @@ export default {
             username: "",
             password: "",
             cofirmedPassword: "",
-            temp: ""
+            temp: "",
+            isFormValid: ""
         };
     },
     methods: {
