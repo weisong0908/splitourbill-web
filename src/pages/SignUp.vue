@@ -1,7 +1,7 @@
 <template>
     <page title="Welcome, new user!" :subtitle="temp">
         <p>is form valid? {{isFormValid}}</p>
-        <form action="submit" @submit="signUp">
+        <form @submit.prevent="signUp">
             <b-field label="Email">
                 <b-input v-model="email" type="email" required></b-input>
             </b-field>
