@@ -1,5 +1,26 @@
 <template>
     <page :title="pageTitle">
+        <b-modal :active.sync="isAddBillSharersFormShown" has-modal-card>
+            <div class="modal-card">
+                <div class="modal-card-head">
+                    <p class="modal-card-title">Add friends to share the bill with you</p>
+                </div>
+                <div class="modal-card-body">
+                    <b-field>
+                        <b-select multiple v-model="selectedBillSharers">
+                            <option
+                                v-for="sharerOption in billSharerOptions"
+                                :key="sharerOption.id"
+                                :value="sharerOption"
+                            >{{sharerOption.username}}</option>
+                        </b-select>
+                    </b-field>
+                </div>
+                <div class="modal-card-foot">
+                    <b-button type="is-primary" @click="updateBillSharers">Ok</b-button>
+                </div>
+            </div>
+        </b-modal>
         <form @submit.prevent="submitBill">
             <b-field label="Purpose">
                 <b-select placeholder="What is this bill for?" v-model="billData.purpose" required>
@@ -42,7 +63,7 @@
             </b-field>
             <b-field label="Split the bill with..."></b-field>
             <b-field>
-                <b-button @click="addSharer">Add person</b-button>
+                <b-button @click="openAddBillSharersForm">Add person</b-button>
             </b-field>
             <b-field>
                 <b-table :data="billData.requests">
@@ -75,6 +96,7 @@ import page from "../components/Page";
 import pageMixin from "../mixins/page";
 import configurationService from "../services/configurationService";
 import billService from "../services/billService";
+import userService from "../services/userService";
 
 export default {
     components: {
@@ -100,7 +122,10 @@ export default {
                 datetime: now,
                 remarks: "",
                 requests: []
-            }
+            },
+            isAddBillSharersFormShown: false,
+            billSharerOptions: [],
+            selectedBillSharers: []
         };
     },
     methods: {
@@ -128,10 +153,42 @@ export default {
                     });
                 });
         },
-        addSharer() {
+        openAddBillSharersForm() {
+            this.isAddBillSharersFormShown = true;
+
+            userService.getFriends().then(resp => {
+                this.billSharerOptions = [...resp.data];
+            });
+        },
+        updateBillSharers() {
+            this.isAddBillSharersFormShown = false;
+
             this.billData.requests = [
-                ...this.billData.requests,
-                { user: { id: 4, username: "User 4" }, amount: 0 }
+                ...this.billData.requests.filter(r => {
+                    if (
+                        this.selectedBillSharers.filter(
+                            s => s.id == r.user.id
+                        )[0]
+                    )
+                        return true;
+                    return false;
+                }),
+                ...this.selectedBillSharers
+                    .filter(s => {
+                        if (
+                            this.billData.requests.filter(
+                                r => r.user.id == s.id
+                            )[0]
+                        )
+                            return false;
+                        return true;
+                    })
+                    .map(s => {
+                        return {
+                            user: { id: s.id, username: s.username },
+                            amount: 0
+                        };
+                    })
             ];
         }
     },
