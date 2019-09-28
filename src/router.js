@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import TransactionDetail from "./pages/TransactionDetail";
 import Bill from "./pages/Bill";
 import SignUp from "./pages/SignUp";
+import Friends from "./pages/Friends";
 
 Vue.use(VueRouter);
 
@@ -16,6 +17,7 @@ export default new VueRouter({
 		{ name: "addBill", path: "/bill", component: Bill },
 		{ name: "editBill", path: "/bill/:id", component: Bill },
 		{ name: "signUp", path: "/signup", component: SignUp },
+		{ name: "friends", path: "/friends", component: Friends },
 		{ path: "/", redirect: "dashboard" }
 	]
 });

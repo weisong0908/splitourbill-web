@@ -33,6 +33,19 @@ export default {
 		return new Promise(resolve => {
 			resolve({ data });
 		});
+	},
+
+	/**
+	 * @returns {Promise} The list of friends
+	 */
+	getFriends() {
+		let friends = fakeUsers.map(u => {
+			return { id: u.id, username: u.username };
+		});
+
+		return new Promise(resolve => {
+			resolve({ data: friends });
+		});
 	}
 };
 
