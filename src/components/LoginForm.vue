@@ -58,9 +58,9 @@ export default {
         }
     },
     created() {
-        // this.username = "WS";
-        // this.password = "WS";
-        // this.logIn();
+        this.username = "WS";
+        this.password = "WS";
+        this.logIn();
     }
 };
 </script>
