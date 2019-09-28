@@ -19,7 +19,8 @@ export default {
         return {
             pages: [
                 { title: "Dashboard", path: "/dashboard" },
-                { title: "Add bill", path: "/bill" }
+                { title: "Add bill", path: "/bill" },
+                { title: "Friends", path: "/friends" }
             ]
         };
     }
