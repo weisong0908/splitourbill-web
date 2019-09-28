@@ -46,6 +46,19 @@ export default {
 		return new Promise(resolve => {
 			resolve({ data: friends });
 		});
+	},
+
+	/**
+	 *
+	 * @param {Number} userId
+	 * @returns {Promise} Friend
+	 */
+	getFriend(userId) {
+		let friend = fakeUsers.filter(u => u.id == userId)[0];
+
+		return new Promise(resolve => {
+			resolve({ data: friend });
+		});
 	}
 };
 
