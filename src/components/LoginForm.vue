@@ -58,9 +58,11 @@ export default {
         }
     },
     created() {
-        this.username = "WS";
-        this.password = "WS";
-        this.logIn();
+        if (!this.$store.state.isUserLoggedIn) {
+            this.username = "WS";
+            this.password = "WS";
+            this.logIn();
+        }
     }
 };
 </script>
