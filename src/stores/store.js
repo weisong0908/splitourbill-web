@@ -27,7 +27,8 @@ export default new Vuex.Store({
 				message: "A bill was added",
 				type: "failure"
 			}
-		]
+		],
+		isAddFriendFormShown: false
 	},
 	mutations: {
 		logIn(state, userInfo) {
@@ -44,6 +45,9 @@ export default new Vuex.Store({
 		},
 		userIsOnSignUpPage(state, payload) {
 			state.isUserOnSignUpPage = payload;
+		},
+		toggleAddFriendForm(state, payload) {
+			state.isAddFriendFormShown = payload;
 		}
 	}
 });
