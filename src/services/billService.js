@@ -1,28 +1,24 @@
+import axios from "axios";
+
 export default {
 	addBill(bill) {
-		let data = { ...bill };
-		data.id = fakeBills.length + 1;
-		fakeBills.push(data);
+		// let data = { ...bill };
+		// data.id = fakeBills.length + 1;
+		// fakeBills.push(data);
 
-		return new Promise(resolve => {
-			resolve();
-		});
+		// return new Promise(resolve => {
+		// 	resolve();
+		// });
+
+		return axios.post("http://localhost:5000/bill", bill);
 	},
 
 	getBill(id) {
-		let bill = fakeBills.filter(b => b.id == id)[0];
-
-		return new Promise((resolve, reject) => {
-			if (bill) resolve({ data: bill });
-			else reject(`bill with id: ${id} was not found`);
-		});
+		return axios.get(`http://localhost:5000/bill/${id}`);
 	},
 
 	getBills(count) {
-		let bills = fakeBills.slice(0, count);
-		return new Promise(resolve => {
-			resolve({ data: bills });
-		});
+		return axios.get(`http://localhost:5000/bills/${count}`);
 	}
 };
 
@@ -30,7 +26,7 @@ let fakeBills = [
 	{
 		id: 1,
 		requestor: { id: 1, username: "User 1" },
-		datetime: new Date(),
+		dateTime: new Date(),
 		purpose: "Dinner",
 		remarks: "nothing",
 		totalAmount: 60,

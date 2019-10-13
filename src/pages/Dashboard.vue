@@ -15,7 +15,7 @@
                         <template slot-scope="props">
                             <b-table-column
                                 label="Date"
-                            >{{ props.row.datetime.toLocaleString("en-SG") }}</b-table-column>
+                            >{{ new Date(props.row.dateTime).toLocaleString("en-SG") }}</b-table-column>
                             <b-table-column label="Purpose">{{ props.row.purpose }}</b-table-column>
                             <b-table-column label="Total Amount">{{ props.row.totalAmount }}</b-table-column>
                             <b-table-column label="Detail">

@@ -42,7 +42,7 @@
             </b-field>
             <b-field label="Select a date">
                 <b-datepicker
-                    v-model="billData.datetime"
+                    v-model="billData.dateTime"
                     :date-formatter="dateFormat"
                     placeholder="Click to select..."
                     icon="calendar-today"
@@ -51,7 +51,7 @@
 
             <b-field label="Select a time">
                 <b-timepicker
-                    v-model="billData.datetime"
+                    v-model="billData.dateTime"
                     placeholder="Click to select..."
                     icon="clock"
                     inline
@@ -119,7 +119,7 @@ export default {
                 },
                 purpose: "",
                 totalAmount: "",
-                datetime: now,
+                dateTime: now,
                 remarks: "",
                 requests: []
             },
@@ -206,7 +206,10 @@ export default {
     created() {
         if (this.$route.params.id) {
             billService.getBill(this.$route.params.id).then(resp => {
-                this.billData = { ...resp.data };
+                this.billData = {
+                    ...resp.data,
+                    dateTime: new Date(resp.data.dateTime)
+                };
                 this.pageTitle = "Update bill " + this.$route.params.id;
                 this.submitButtonLabel = "Update bill";
             });
