@@ -110,7 +110,7 @@ export default {
             pageTitle: "Add a bill",
             purposes: [],
             dateFormat: date => date.toLocaleDateString("en-SG"),
-            submitButtonLabel: "Add bill",
+            isNewBill: true,
             billData: {
                 id: "",
                 requestor: {
@@ -130,28 +130,49 @@ export default {
     },
     methods: {
         submitBill() {
-            billService
-                .addBill(this.billData)
-                .then(resp => {
-                    this.notify({
-                        title: "Bill added successfully",
-                        message:
-                            "A bill of SGD " +
-                            this.billData.totalAmount +
-                            " was added",
-                        type: "is-success"
-                    });
+            if (this.isNewBill) {
+                billService
+                    .addBill(this.billData)
+                    .then(resp => {
+                        this.notify({
+                            title: "Bill added successfully",
+                            message:
+                                "A bill of SGD " +
+                                this.billData.totalAmount +
+                                " has been added",
+                            type: "is-success"
+                        });
 
-                    this.$router.push({ name: "dashboard" });
-                })
-                .catch(resp => {
-                    this.notify({
-                        title: "Error adding bill",
-                        message:
-                            "There is error adding the bill, please try again.",
-                        type: "is-danger"
+                        this.$router.push({ name: "dashboard" });
+                    })
+                    .catch(resp => {
+                        this.notify({
+                            title: "Error adding bill",
+                            message:
+                                "There is error adding the bill, please try again.",
+                            type: "is-danger"
+                        });
                     });
-                });
+            } else {
+                billService
+                    .updateBill(this.billData.id, this.billData)
+                    .then(resp => {
+                        this.notify({
+                            title: "Bill updated successfully",
+                            message: `The bill (${this.billData.id}) has been updated`,
+                            type: "is-success"
+                        });
+                        this.$router.push({ name: "dashboard" });
+                    })
+                    .catch(resp => {
+                        this.notify({
+                            title: "Error updating bill",
+                            message:
+                                "There is error updating the bill, please try again.",
+                            type: "is-danger"
+                        });
+                    });
+            }
         },
         openAddBillSharersForm() {
             this.isAddBillSharersFormShown = true;
@@ -201,18 +222,24 @@ export default {
             });
 
             return this.billData.totalAmount - amountPaidByOtherUsers;
+        },
+        submitButtonLabel() {
+            return this.isNewBill ? "Add bill" : "Update bill";
         }
     },
     created() {
         if (this.$route.params.id) {
+            this.isNewBill = false;
+
             billService.getBill(this.$route.params.id).then(resp => {
                 this.billData = {
                     ...resp.data,
                     dateTime: new Date(resp.data.dateTime)
                 };
                 this.pageTitle = "Update bill " + this.$route.params.id;
-                this.submitButtonLabel = "Update bill";
             });
+        } else {
+            this.isNewBill = true;
         }
 
         configurationService.getBillPurposes().then(resp => {

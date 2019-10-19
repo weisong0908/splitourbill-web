@@ -64,7 +64,7 @@ export default {
 
 let fakeUsers = [
 	{
-		id: 1,
+		id: "2c18542b-951c-4946-aaf2-9fe2e563f0df",
 		username: "WS",
 		password: "WS"
 	},
