@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export default {
 	/**
 	 * @param {Object} loginInfo
@@ -5,19 +7,9 @@ export default {
 	 * @param {String} loginInfo.password
 	 * @returns {Promise} The userInfo with id, username
 	 */
-	authenticate(loginInfo) {
-		let user = fakeUsers.filter(u => u.username == loginInfo.username)[0];
-
-		return new Promise((resolve, reject) => {
-			if (user) {
-				const userInfo = {
-					id: user.id,
-					username: user.username
-				};
-				resolve({ data: userInfo });
-			} else reject("user not found, wrong username and/or password.");
-		});
-	},
+    authenticate(loginInfo) {
+        return axios.post("http://localhost:5000/login", loginInfo);
+    },
 
 	/**
 	 * @param {Object} userInfo
@@ -26,66 +18,23 @@ export default {
 	 * @param {String} userInfo.password
 	 * @returns {Promise} The userInfo with id, username
 	 */
-	addNewUser(userInfo) {
-		let data = { ...userInfo };
-		data.id = fakeUsers.length + 1;
-		fakeUsers.push(data);
-		return new Promise(resolve => {
-			resolve({ data });
-		});
-	},
+    addNewUser(userInfo) {
+        return axios.post("http://localhost:5000/signup", userInfo);
+    },
 
 	/**
 	 * @returns {Promise} The list of friends
 	 */
-	getFriends() {
-		let friends = fakeUsers.map(u => {
-			return { id: u.id, username: u.username };
-		});
-
-		return new Promise(resolve => {
-			resolve({ data: friends });
-		});
-	},
+    getFriends() {
+        return axios.get("http://localhost:5000/friends");
+    },
 
 	/**
 	 *
 	 * @param {Number} userId
 	 * @returns {Promise} Friend
 	 */
-	getFriend(userId) {
-		let friend = fakeUsers.filter(u => u.id == userId)[0];
-
-		return new Promise(resolve => {
-			resolve({ data: friend });
-		});
-	}
+    getFriend(userId) {
+        return axios.get(`http://localhost:5000/friend/${userId}`);
+    }
 };
-
-let fakeUsers = [
-	{
-		id: "2c18542b-951c-4946-aaf2-9fe2e563f0df",
-		username: "WS",
-		password: "WS"
-	},
-	{
-		id: 2,
-		username: "User 2",
-		password: "User 2"
-	},
-	{
-		id: 3,
-		username: "User 3",
-		password: "User 3"
-	},
-	{
-		id: 4,
-		username: "User 4",
-		password: "User 4"
-	},
-	{
-		id: 5,
-		username: "User 5",
-		password: "User 5"
-	}
-];
