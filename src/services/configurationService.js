@@ -1,26 +1,7 @@
+import axios from "axios";
+
 export default {
     getBillPurposes() {
-        let result = fakeBillPurposes;
-        return new Promise(resolve => resolve({ data: result }));
+        return axios.get("http://localhost:5000/configuration/purposes");
     }
 }
-
-const fakeBillPurposes = [
-    {
-        groupName: "Meal",
-        options: [
-            "Breakfast",
-            "Lunch",
-            "Dinner",
-            "Supper",
-            "Snack",
-            "Drink",
-            "Brunch"
-        ]
-    },
-    {
-        groupName: "Activity",
-        options: ["Movie", "Sing K", "Games", "Workout"]
-    },
-    { groupName: "Event", options: ["Wedding", "Songka"] }
-]
