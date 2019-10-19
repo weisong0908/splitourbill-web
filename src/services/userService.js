@@ -8,7 +8,7 @@ export default {
 	 * @returns {Promise} The userInfo with id, username
 	 */
     authenticate(loginInfo) {
-        return axios.post("http://localhost:5000/login", loginInfo);
+        return axios.post(`${process.env.VUE_APP_GatewayApiUrl}/login`, loginInfo);
     },
 
 	/**
@@ -19,14 +19,14 @@ export default {
 	 * @returns {Promise} The userInfo with id, username
 	 */
     addNewUser(userInfo) {
-        return axios.post("http://localhost:5000/signup", userInfo);
+        return axios.post(`${process.env.VUE_APP_GatewayApiUrl}/signup`, userInfo);
     },
 
 	/**
 	 * @returns {Promise} The list of friends
 	 */
     getFriends() {
-        return axios.get("http://localhost:5000/friends");
+        return axios.get(`${process.env.VUE_APP_GatewayApiUrl}/friends`);
     },
 
 	/**
@@ -35,6 +35,6 @@ export default {
 	 * @returns {Promise} Friend
 	 */
     getFriend(userId) {
-        return axios.get(`http://localhost:5000/friend/${userId}`);
+        return axios.get(`${process.env.VUE_APP_GatewayApiUrl}/friend/${userId}`);
     }
 };

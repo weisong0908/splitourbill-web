@@ -1,19 +1,19 @@
 import axios from "axios";
 
 export default {
-	addBill(bill) {
-		return axios.post("http://localhost:5000/bill", bill);
-	},
+    addBill(bill) {
+        return axios.post(`${process.env.VUE_APP_GatewayApiUrl}/bill`, bill);
+    },
 
-	updateBill(billId, bill) {
-		return axios.put(`http://localhost:5000/bill/${billId}`, bill);
-	},
+    updateBill(billId, bill) {
+        return axios.put(`${process.env.VUE_APP_GatewayApiUrl}/bill/${billId}`, bill);
+    },
 
-	getBill(id) {
-		return axios.get(`http://localhost:5000/bill/${id}`);
-	},
+    getBill(id) {
+        return axios.get(`${process.env.VUE_APP_GatewayApiUrl}/bill/${id}`);
+    },
 
-	getBills(count) {
-		return axios.get(`http://localhost:5000/bills/${count}`);
-	}
+    getBills(count) {
+        return axios.get(`${process.env.VUE_APP_GatewayApiUrl}/bills/${count}`);
+    }
 };
