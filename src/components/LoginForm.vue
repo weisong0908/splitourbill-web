@@ -11,10 +11,13 @@
                 <b-field label="Password">
                     <b-input v-model="password" type="password" required></b-input>
                 </b-field>
+                <p class="has-text-danger" v-if="loginErrorMessage">{{ loginErrorMessage }}</p>
             </div>
             <div class="modal-card-foot">
-                <b-button type="is-primary" @click="logIn">Log in</b-button>
-                <b-button @click="signUp">Sign up</b-button>
+                <div class="buttons">
+                    <b-button type="is-primary" @click="logIn">Log in</b-button>
+                    <b-button @click="signUp">Sign up</b-button>
+                </div>
             </div>
         </div>
     </b-modal>
@@ -28,7 +31,8 @@ export default {
         return {
             show: !this.$store.state.isUserLoggedIn,
             username: "WS",
-            password: "WS"
+            password: "WS",
+            loginErrorMessage: ""
         };
     },
     computed: {
@@ -41,6 +45,8 @@ export default {
     },
     methods: {
         logIn() {
+            this.loginErrorMessage = "";
+
             userService
                 .authenticate({
                     username: this.username,
@@ -49,8 +55,15 @@ export default {
                 .then(resp => {
                     this.$store.commit("logIn", resp.data);
                 })
-                .catch(resp => {
-                    alert(resp);
+                .catch(error => {
+                    console.log(error);
+                    if (!error.response) {
+                        this.loginErrorMessage = "Network Error";
+                    } else if (error.response.status == "404") {
+                        this.loginErrorMessage = "Wrong username or password";
+                    } else {
+                        this.loginErrorMessage = error;
+                    }
                 });
         },
         signUp() {
