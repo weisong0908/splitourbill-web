@@ -56,7 +56,6 @@ export default {
                     this.$store.commit("logIn", resp.data);
                 })
                 .catch(error => {
-                    console.log(error);
                     if (!error.response) {
                         this.loginErrorMessage = "Network Error";
                     } else if (error.response.status == "404") {
