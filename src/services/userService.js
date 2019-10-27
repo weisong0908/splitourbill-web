@@ -11,6 +11,22 @@ export default {
         return axios.post(`${process.env.VUE_APP_GatewayApiUrl}/login`, loginInfo);
     },
 
+    /**
+     * @returns {Promise} The list of all users
+     */
+    getUsers() {
+        return axios.get(`${process.env.VUE_APP_GatewayApiUrl}/users`);
+    },
+
+
+    sendFriendRequest(requestorId, requesteeId) {
+        const request = { requestorId, requesteeId };
+        console.log("request", request);
+        return axios.post(`${process.env.VUE_APP_GatewayApiUrl}/friend`, {
+            requestorId, requesteeId
+        });
+    },
+
 	/**
 	 * @param {Object} userInfo
 	 * @param {String} userInfo.username

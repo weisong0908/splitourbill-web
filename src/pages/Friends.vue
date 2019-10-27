@@ -41,9 +41,10 @@ export default {
         showAddFriendForm() {
             this.$store.commit("toggleAddFriendForm", true);
         },
-        notifyFriendRequestSent() {
+        notifyFriendRequestSent(selectedUser) {
+            console.log(selectedUser);
             this.notify({
-                title: "Friend request sent",
+                title: `Friend request sent to ${selectedUser.username}`,
                 message: "A new friend request was sent",
                 type: "is-success"
             });
