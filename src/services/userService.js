@@ -7,25 +7,37 @@ export default {
 	 * @param {String} loginInfo.password
 	 * @returns {Promise} The userInfo with id, username
 	 */
-    authenticate(loginInfo) {
-        return axios.post(`${process.env.VUE_APP_GatewayApiUrl}/login`, loginInfo);
-    },
+	authenticate(loginInfo) {
+		return axios.post(`${process.env.VUE_APP_GatewayApiUrl}/login`, loginInfo);
+	},
 
     /**
      * @returns {Promise} The list of all users
      */
-    getUsers() {
-        return axios.get(`${process.env.VUE_APP_GatewayApiUrl}/users`);
-    },
+	getUsers() {
+		return axios.get(`${process.env.VUE_APP_GatewayApiUrl}/users`);
+	},
 
+	/**
+	 * Send friend request to server
+	 * @param {Guid} requestorId 
+	 * @param {Guid} requesteeId 
+	 */
+	sendFriendRequest(requestorId, requesteeId) {
+		const request = { requestorId, requesteeId };
+		console.log("request", request);
+		return axios.post(`${process.env.VUE_APP_GatewayApiUrl}/friend`, {
+			requestorId, requesteeId
+		});
+	},
 
-    sendFriendRequest(requestorId, requesteeId) {
-        const request = { requestorId, requesteeId };
-        console.log("request", request);
-        return axios.post(`${process.env.VUE_APP_GatewayApiUrl}/friend`, {
-            requestorId, requesteeId
-        });
-    },
+	/**
+	 * Get all friend requests
+	 * @param {Guid} requesteeId 
+	 */
+	getFriendRequests(requesteeId) {
+		return axios.get(`${process.env.VUE_APP_GatewayApiUrl}/friendRequests/${requesteeId}`);
+	},
 
 	/**
 	 * @param {Object} userInfo
@@ -34,23 +46,23 @@ export default {
 	 * @param {String} userInfo.password
 	 * @returns {Promise} The userInfo with id, username
 	 */
-    addNewUser(userInfo) {
-        return axios.post(`${process.env.VUE_APP_GatewayApiUrl}/signup`, userInfo);
-    },
+	addNewUser(userInfo) {
+		return axios.post(`${process.env.VUE_APP_GatewayApiUrl}/signup`, userInfo);
+	},
 
 	/**
 	 * @returns {Promise} The list of friends
 	 */
-    getFriends() {
-        return axios.get(`${process.env.VUE_APP_GatewayApiUrl}/friends`);
-    },
+	getFriends() {
+		return axios.get(`${process.env.VUE_APP_GatewayApiUrl}/friends`);
+	},
 
 	/**
 	 *
 	 * @param {Number} userId
 	 * @returns {Promise} Friend
 	 */
-    getFriend(userId) {
-        return axios.get(`${process.env.VUE_APP_GatewayApiUrl}/friend/${userId}`);
-    }
+	getFriend(userId) {
+		return axios.get(`${process.env.VUE_APP_GatewayApiUrl}/friend/${userId}`);
+	}
 };
