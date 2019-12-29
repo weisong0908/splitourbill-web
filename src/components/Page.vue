@@ -34,20 +34,18 @@ export default {
 	},
 	mounted() {
 		if (this.$store.state.isUserLoggedIn) {
-			userService
-				.getFriendRequests(this.$store.state.userInfo.id)
-				.then(resp => {
-					console.log("resp", resp);
-					this.friendRequests = [...resp.data];
-					console.log("friendRequests", this.friendRequests);
-					this.friendRequests.forEach(fr => {
-						this.notify({
-							title: `New friend request from ${fr.requestorUsername}`,
-							message: "A new friend request is pending",
-							type: "is-success"
-						});
+			userService.getFriendRequests(this.$store.state.userInfo.id).then(resp => {
+				console.log("resp", resp);
+				this.friendRequests = [...resp.data];
+				console.log("friendRequests", this.friendRequests);
+				this.friendRequests.forEach(fr => {
+					this.notify({
+						title: `New friend request from ${fr.requestorUsername}`,
+						message: "A new friend request is pending",
+						type: "is-success"
 					});
 				});
+			});
 		}
 	}
 };
