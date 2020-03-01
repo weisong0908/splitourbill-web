@@ -30,14 +30,17 @@ export default {
 	data() {
 		return {
 			show: !this.$store.state.isUserLoggedIn,
-			username: "WS",
-			password: "WS",
+			username: "",
+			password: "",
 			loginErrorMessage: ""
 		};
 	},
 	computed: {
 		isLoginFormShown() {
-			return !this.$store.state.isUserLoggedIn && !this.$store.state.isUserOnSignUpPage;
+			return (
+				!this.$store.state.isUserLoggedIn &&
+				!this.$store.state.isUserOnSignUpPage
+			);
 		}
 	},
 	methods: {
@@ -53,10 +56,10 @@ export default {
 					this.$store.commit("logIn", resp.data);
 				})
 				.catch(error => {
-					console.log(error);
+					console.log(error.response.data);
 					if (!error.response) {
 						this.loginErrorMessage = "Network Error";
-					} else if (error.response.status == "404") {
+					} else if (error.response.status == "400") {
 						this.loginErrorMessage = "Wrong username or password";
 					} else {
 						this.loginErrorMessage = error;
@@ -69,8 +72,8 @@ export default {
 	},
 	created() {
 		if (!this.$store.state.isUserLoggedIn) {
-			this.username = "WS";
-			this.password = "WS";
+			this.username = "alice";
+			this.password = "Pass123$";
 			this.logIn();
 		}
 	}
