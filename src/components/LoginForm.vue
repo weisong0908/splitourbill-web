@@ -54,9 +54,15 @@ export default {
 				})
 				.then(resp => {
 					this.$store.commit("logIn", resp.data);
+					userService
+						.getCurrentUserInfo(
+							this.$store.state.accessInfo.accessToken
+						)
+						.then(info => {
+							this.$store.commit("setUserInfo", info.data);
+						});
 				})
 				.catch(error => {
-					console.log(error.response.data);
 					if (!error.response) {
 						this.loginErrorMessage = "Network Error";
 					} else if (error.response.status == "400") {

@@ -7,9 +7,16 @@ export default new Vuex.Store({
 	state: {
 		isUserLoggedIn: false,
 		isUserOnSignUpPage: false,
+		accessInfo: {
+			accessToken: "",
+			tokenType: "",
+			scopes: []
+		},
 		userInfo: {
 			id: "",
-			username: ""
+			username: "",
+			firstName: "",
+			lastName: ""
 		},
 		notifications: [
 			{
@@ -31,10 +38,18 @@ export default new Vuex.Store({
 		isAddFriendFormShown: false
 	},
 	mutations: {
-		logIn(state, userInfo) {
-			state.userInfo = userInfo;
+		logIn(state, accessInfo) {
+			state.accessInfo.accessToken = accessInfo.access_token;
+			state.accessInfo.tokenType = accessInfo.token_type;
+			state.accessInfo.scopes = accessInfo.scope;
 			state.isUserLoggedIn = true;
 			state.isUserOnSignUpPage = false;
+		},
+		setUserInfo(state, userInfo) {
+			state.userInfo.id = userInfo.sub;
+			state.userInfo.username = userInfo.preferred_username;
+			state.userInfo.firstName = userInfo.given_name;
+			state.userInfo.lastName = userInfo.family_name;
 		},
 		logOut(state) {
 			state.userInfo = {};

@@ -6,7 +6,7 @@ export default {
 	 * @param {Object} loginInfo
 	 * @param {String} loginInfo.username
 	 * @param {String} loginInfo.password
-	 * @returns {Promise} The userInfo with id, username
+	 * @returns {Promise} The accessInfo including access token and token type
 	 */
     authenticate(loginInfo) {
         // return axios.post(`${process.env.VUE_APP_GatewayApiUrl}/login`, loginInfo);
@@ -24,6 +24,20 @@ export default {
             }
         };
         return axios.post(`${process.env.VUE_APP_IdentityServiceUrl}/connect/token`, qs.stringify(param), config);
+    },
+
+    /**
+     * @param {string} accessToken
+     * @returns {userInfo}
+     */
+    getCurrentUserInfo(accessToken) {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        };
+
+        return axios.get(`${process.env.VUE_APP_IdentityServiceUrl}/connect/userinfo`, config);
     },
 
     /**
