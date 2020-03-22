@@ -80,7 +80,6 @@ export default {
       return this.notifications.length == 0 ? "is-light" : "is-warning";
     },
     isUserLoggedIn() {
-      //   return this.$store.state.isUserLoggedIn;
       return this.$auth.isAuthenticated;
     },
     displayName() {
@@ -104,9 +103,6 @@ export default {
           returnTo: window.location.origin
         });
       }
-    },
-    signUp() {
-      this.$router.push({ name: "signUp" });
     }
   }
 };

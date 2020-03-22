@@ -30,7 +30,7 @@ export default {
     };
   },
   mounted() {
-    if (this.$store.state.isUserLoggedIn) {
+    if (this.$auth.isAuthenticated) {
       userService
         .getFriendRequests(this.$store.state.userInfo.id)
         .then(resp => {
