@@ -43,13 +43,14 @@ export default {
     /**
      * @returns {Promise} The list of all users
      */
-    getUsers(accessToken) {
+    async getUsers(accessToken) {
+        console.log("access token", accessToken);
         const config = {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
         };
-        return axios.get(`${process.env.VUE_APP_GatewayApiUrl}/users`, config);
+        return axios.get(`${process.env.VUE_APP_Backend}/users`, config);
     },
 
 	/**

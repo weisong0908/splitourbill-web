@@ -9,10 +9,12 @@ Vue.config.productionTip = false
 
 const domain = process.env.VUE_APP_Auth0_domain;
 const clientId = process.env.VUE_APP_Auth0_clientId;
+const audience = process.env.VUE_APP_Auth0_audience;
 
 Vue.use(Auth0Plugin, {
   domain,
   clientId,
+  audience,
   onRedirectCallback: appState => {
     router.push(appState && appState.targetUrl ? appState.targetUrl : window.location.pathname);
   }

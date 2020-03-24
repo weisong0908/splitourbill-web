@@ -29,21 +29,33 @@ export default {
       friendRequests: []
     };
   },
-  mounted() {
+  async mounted() {
+    // if (this.$auth.isAuthenticated) {
+    //   userService
+    //     .getFriendRequests(this.$store.state.userInfo.id)
+    //     .then(resp => {
+    //       console.log("resp", resp);
+    //       this.friendRequests = [...resp.data];
+    //       console.log("friendRequests", this.friendRequests);
+    //       this.friendRequests.forEach(fr => {
+    //         this.notify({
+    //           title: `New friend request from ${fr.requestorUsername}`,
+    //           message: "A new friend request is pending",
+    //           type: "is-success"
+    //         });
+    //       });
+    //     });
+    // }
+
     if (this.$auth.isAuthenticated) {
+      const accessToken = await this.$auth.getTokenSilently();
       userService
-        .getFriendRequests(this.$store.state.userInfo.id)
+        .getUsers(accessToken)
         .then(resp => {
-          console.log("resp", resp);
-          this.friendRequests = [...resp.data];
-          console.log("friendRequests", this.friendRequests);
-          this.friendRequests.forEach(fr => {
-            this.notify({
-              title: `New friend request from ${fr.requestorUsername}`,
-              message: "A new friend request is pending",
-              type: "is-success"
-            });
-          });
+          console.log("users", resp.data);
+        })
+        .catch(err => {
+          console.log("error", err);
         });
     }
   }

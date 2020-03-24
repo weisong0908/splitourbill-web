@@ -93,6 +93,7 @@ export default {
       this.$store.state.userInfo.id == ""
     )
       this.$store.commit("setUserInfo", this.$auth.user);
+    console.log("userinfo", this.$auth.user);
   },
   methods: {
     logInOrOut() {
