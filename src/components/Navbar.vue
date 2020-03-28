@@ -97,6 +97,7 @@ export default {
         this.updateNotification();
       } else {
         authService.logout(this.$auth);
+        this.$router.push({ name: "home" });
       }
     },
     updateNotification() {
