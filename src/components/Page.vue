@@ -19,7 +19,6 @@
 
 <script>
 import pageMixin from "../mixins/page";
-import userService from "../services/userService";
 
 export default {
   props: ["title", "subtitle"],
@@ -28,36 +27,6 @@ export default {
     return {
       friendRequests: []
     };
-  },
-  async mounted() {
-    // if (this.$auth.isAuthenticated) {
-    //   userService
-    //     .getFriendRequests(this.$store.state.userInfo.id)
-    //     .then(resp => {
-    //       console.log("resp", resp);
-    //       this.friendRequests = [...resp.data];
-    //       console.log("friendRequests", this.friendRequests);
-    //       this.friendRequests.forEach(fr => {
-    //         this.notify({
-    //           title: `New friend request from ${fr.requestorUsername}`,
-    //           message: "A new friend request is pending",
-    //           type: "is-success"
-    //         });
-    //       });
-    //     });
-    // }
-
-    if (this.$auth.isAuthenticated) {
-      const accessToken = await this.$auth.getTokenSilently();
-      userService
-        .getUsers(accessToken)
-        .then(resp => {
-          console.log("users", resp.data);
-        })
-        .catch(err => {
-          console.log("error", err);
-        });
-    }
   }
 };
 </script>

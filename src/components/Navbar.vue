@@ -68,6 +68,8 @@
 </template>
 
 <script>
+import authService from "../services/authService";
+
 export default {
   props: ["pages"],
   data() {
@@ -86,23 +88,13 @@ export default {
       return this.$store.state.userInfo.username;
     }
   },
-  updated() {
-    if (
-      this.$auth.isAuthenticated &&
-      this.$auth.user.sub &&
-      this.$store.state.userInfo.id == ""
-    )
-      this.$store.commit("setUserInfo", this.$auth.user);
-    console.log("userinfo", this.$auth.user);
-  },
   methods: {
-    logInOrOut() {
+    async logInOrOut() {
       if (!this.$auth.isAuthenticated) {
-        this.$auth.loginWithRedirect();
+        await authService.login(this.$auth);
+        this.$store.commit("setUserInfo", this.$auth.user);
       } else {
-        this.$auth.logout({
-          returnTo: window.location.origin
-        });
+        authService.logout(this.$auth);
       }
     }
   }
