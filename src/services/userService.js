@@ -3,6 +3,19 @@ import { getInstance } from "../auth/index";
 
 
 export default {
+
+    async getUserInfo(userId) {
+        const authService = getInstance();
+        const accessToken = await authService.getTokenSilently();
+        const config = {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        };
+
+        return axios.get(`${process.env.VUE_APP_Backend}/users/${userId}`, config);
+    },
+
     /**
      * @returns {Promise} The list of all users
      */
