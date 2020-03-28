@@ -12,16 +12,7 @@ export default new Vuex.Store({
 		},
 		notifications: [
 			{
-				title: "Bill added",
-				message: "A bill was added",
-				type: "success"
-			},
-			{
-				title: "Bill added",
-				message: "A bill was added",
-				type: "success"
-			},
-			{
+				id: "",
 				title: "Bill added",
 				message: "A bill was added",
 				type: "failure"
@@ -36,7 +27,8 @@ export default new Vuex.Store({
 			state.userInfo.name = user.name;
 		},
 		addNotification(state, notification) {
-			state.notifications.unshift(notification);
+			if (!state.notifications.find(n => n.id == notification.id))
+				state.notifications.unshift(notification);
 		},
 		toggleAddFriendForm(state, payload) {
 			state.isAddFriendFormShown = payload;

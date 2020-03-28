@@ -27,12 +27,13 @@
             icon-left="bell"
             size="is-small"
             rounded
+            @click="updateNotification"
           >{{notifications.length}}</b-button>
           <b-dropdown-item v-for="(notification, index) in notifications" :key="index" paddingless>
             <div class="media navbar-item">
               <b-icon
                 class="media-left"
-                :icon="notification.type=='is-success'? 'check-circle-outline':'close-circle-outline'"
+                :icon="notification.type=='success'? 'check-circle-outline':'close-circle-outline'"
               ></b-icon>
               <div class="media-content">
                 <h3>{{notification.title}}</h3>
@@ -69,6 +70,7 @@
 
 <script>
 import authService from "../services/authService";
+import userService from "../services/userService";
 
 export default {
   props: ["pages"],
@@ -92,10 +94,24 @@ export default {
     async logInOrOut() {
       if (!this.$auth.isAuthenticated) {
         await authService.login(this.$auth);
-        this.$store.commit("setUserInfo", this.$auth.user);
+        this.updateNotification();
       } else {
         authService.logout(this.$auth);
       }
+    },
+    updateNotification() {
+      userService
+        .getFriendRequests(this.$store.state.userInfo.id)
+        .then(resp => {
+          resp.data.forEach(item => {
+            this.$store.commit("addNotification", {
+              id: item.id,
+              title: "Pending friend request",
+              message: `${item.requestor.username}`,
+              type: "success"
+            });
+          });
+        });
     }
   }
 };
