@@ -7,9 +7,37 @@ import Bill from "./pages/Bill";
 import Friends from "./pages/Friends";
 import FriendDetail from "./pages/FriendDetail";
 
-import { authGuard } from "./auth/authGuard";
+import { getInstance } from "./auth/index";
+import store from "./stores/store";
 
 Vue.use(VueRouter);
+
+const authGuard = (to, from, next) => {
+	const authService = getInstance();
+	const fn = async () => {
+		// If the user is authenticated, continue with the route
+		if (authService.isAuthenticated) {
+			return next();
+		}
+
+		// Otherwise, log in
+		await authService.loginWithPopup();
+		store.commit("setUserInfo", authService.user);
+		return next();
+	};
+
+	// If loading has already finished, check our auth state using `fn()`
+	if (!authService.loading) {
+		return fn();
+	}
+
+	// Watch for the loading property to change before we check isAuthenticated
+	authService.$watch("loading", loading => {
+		if (loading === false) {
+			return fn();
+		}
+	});
+};
 
 const router = new VueRouter({
 	routes: [
@@ -23,5 +51,7 @@ const router = new VueRouter({
 		{ path: "/", redirect: "dashboard", beforeEnter: authGuard }
 	]
 });
+
+
 
 export default router;

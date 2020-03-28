@@ -10,7 +10,7 @@ export const authGuard = (to, from, next) => {
         }
 
         // Otherwise, log in
-        await authService.loginWithPopup({ appState: { targetUrl: to.fullPath } });
+        await authService.loginWithPopup();
         return next();
     };
 
