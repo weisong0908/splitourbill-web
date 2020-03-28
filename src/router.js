@@ -41,14 +41,14 @@ const authGuard = (to, from, next) => {
 
 const router = new VueRouter({
 	routes: [
-		{ name: "dashboard", path: "/dashboard", component: Dashboard, beforeEnter: authGuard },
-		{ path: "/home", redirect: "dashboard", beforeEnter: authGuard },
-		{ name: "transactionDetail", path: "/detail/:transactionCode", component: TransactionDetail, beforeEnter: authGuard },
-		{ name: "addBill", path: "/bill", component: Bill, beforeEnter: authGuard },
-		{ name: "editBill", path: "/bill/:id", component: Bill, beforeEnter: authGuard },
-		{ name: "friends", path: "/friends", component: Friends, beforeEnter: authGuard },
-		{ name: "friendDetail", path: "/friend/:userId", component: FriendDetail, beforeEnter: authGuard },
-		{ path: "/", redirect: "dashboard", beforeEnter: authGuard }
+		{ name: "dashboard", path: "/dashboard", component: Dashboard },
+		{ path: "/home", redirect: "dashboard" },
+		{ name: "transactionDetail", path: "/detail/:transactionCode", component: TransactionDetail },
+		{ name: "addBill", path: "/bill", component: Bill },
+		{ name: "editBill", path: "/bill/:id", component: Bill },
+		{ name: "friends", path: "/friends", component: Friends },
+		{ name: "friendDetail", path: "/friend/:userId", component: FriendDetail },
+		{ path: "/", redirect: "dashboard" }
 	]
 });
 

@@ -1,5 +1,6 @@
 import Vue from "vue";
 import createAuth0Client from "@auth0/auth0-spa-js";
+import store from "../stores/store";
 
 /** Define a default action to perform after authentication */
 const DEFAULT_REDIRECT_CALLBACK = () =>
@@ -45,6 +46,8 @@ export const useAuth0 = ({
         }
 
         this.user = await this.auth0Client.getUser();
+        store.commit("setUserInfo", this.user);
+
         this.isAuthenticated = true;
       },
       /** Handles the callback when logging in using a redirect */
@@ -53,6 +56,9 @@ export const useAuth0 = ({
         try {
           await this.auth0Client.handleRedirectCallback();
           this.user = await this.auth0Client.getUser();
+          if (this.user != null) {
+            store.commit("setUserInfo", this.user);
+          }
           this.isAuthenticated = true;
         } catch (e) {
           this.error = e;
@@ -111,6 +117,9 @@ export const useAuth0 = ({
         // Initialize our internal authentication state
         this.isAuthenticated = await this.auth0Client.isAuthenticated();
         this.user = await this.auth0Client.getUser();
+        if (this.user != null) {
+          store.commit("setUserInfo", this.user);
+        }
         this.loading = false;
       }
     }
