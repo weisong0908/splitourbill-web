@@ -1,6 +1,10 @@
 import axios from "axios";
 
 export default {
+    getBillPurposes() {
+        return axios.get(`${process.env.VUE_APP_Backend}/bills/purposes`);
+    },
+
     addBill(bill) {
         return axios.post(`${process.env.VUE_APP_GatewayApiUrl}/bill`, bill);
     },
