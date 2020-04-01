@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import TransactionDetail from "./pages/TransactionDetail";
 import Bill from "./pages/Bill";
+import EditBill from "./pages/EditBill";
 import Friends from "./pages/Friends";
 import FriendDetail from "./pages/FriendDetail";
 
@@ -45,7 +46,7 @@ const router = new VueRouter({
 		{ name: "dashboard", path: "/dashboard", component: Dashboard },
 		{ name: "transactionDetail", path: "/detail/:transactionCode", component: TransactionDetail },
 		{ name: "addBill", path: "/bill", component: Bill },
-		{ name: "editBill", path: "/bill/:id", component: Bill },
+		{ name: "editBill", path: "/bill/:id", component: EditBill },
 		{ name: "friends", path: "/friends", component: Friends },
 		{ name: "friendDetail", path: "/friend/:userId", component: FriendDetail },
 		{ name: "home", path: "/", component: Home }

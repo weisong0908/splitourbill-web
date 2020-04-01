@@ -14,7 +14,7 @@ export default {
     },
 
     getBill(id) {
-        return axios.get(`${process.env.VUE_APP_GatewayApiUrl}/bill/${id}`);
+        return axios.get(`${process.env.VUE_APP_Backend}/bills/${id}`);
     },
 
     getBills(count) {
