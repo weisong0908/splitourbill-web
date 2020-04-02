@@ -18,7 +18,8 @@ export default new Vuex.Store({
 				type: "failure"
 			}
 		],
-		isAddFriendFormShown: false
+		isAddFriendFormShown: false,
+		isBillSharersFormShown: false,
 	},
 	mutations: {
 		setUserInfo(state, user) {
@@ -32,6 +33,9 @@ export default new Vuex.Store({
 		},
 		toggleAddFriendForm(state, payload) {
 			state.isAddFriendFormShown = payload;
+		},
+		toggleBillSharersForm(state, payload) {
+			state.isBillSharersFormShown = payload;
 		}
 	}
 });

@@ -1,19 +1,17 @@
 <template>
   <page title="Update bill">
-    <b-modal :active.sync="isBillSharersFormShown" has-modal-card>
+    <b-modal :active.sync="isBillSharersFormShown" has-modal-card can-cancel>
       <div class="modal-card">
         <div class="modal-card-head">
           <p class="modal-card-title">Add friends to share the bill with you</p>
         </div>
         <div class="modal-card-body">
           <b-field>
-            <b-select multiple v-model="selectedBillSharers">
-              <option
-                v-for="sharerOption in billSharerOptions"
-                :key="sharerOption.sharer.id"
-                :value="sharerOption"
-              >{{sharerOption.sharer.username}}</option>
-            </b-select>
+            <b-table :data="billSharerOptions" checkable :checked-rows.sync="selectedBillSharers">
+              <template slot-scope="props">
+                <b-table-column label="Name">{{ props.row.username }}</b-table-column>
+              </template>
+            </b-table>
           </b-field>
         </div>
         <div class="modal-card-foot">
@@ -129,27 +127,40 @@ export default {
       this.$router.push("home");
     },
     openBillSharersForm() {
-      this.isBillSharersFormShown = true;
-
       userService.getUserInfo(this.$store.state.userInfo.id).then(resp => {
-        this.billSharerOptions = [
+        const friends = [
           ...resp.data.friends.map(f => {
             return {
-              sharer: {
-                id: f.id,
-                username: f.username
-              },
-              amount: 0
+              id: f.id,
+              username: f.username
             };
-          }),
-          ...this.selectedBillSharers
+          })
         ];
+
+        this.billSharerOptions = friends.filter(
+          f => !this.selectedBillSharers.map(s => s.id).includes(f.id)
+        );
+
+        this.isBillSharersFormShown = true;
       });
     },
     updateBillSharers() {
       this.isBillSharersFormShown = false;
 
-      this.billData.billSharings = [...this.selectedBillSharers];
+      this.selectedBillSharers.forEach(sbs => {
+        if (
+          this.billData.billSharings.findIndex(bs => bs.sharer.id == sbs.id) ==
+          -1
+        ) {
+          this.billData.billSharings.push({
+            sharer: {
+              id: sbs.id,
+              username: sbs.username
+            },
+            amount: 0
+          });
+        }
+      });
     }
   },
   created() {
@@ -162,18 +173,12 @@ export default {
         ...resp.data,
         dateTime: new Date(resp.data.dateTime)
       };
-      this.billData.billSharings = this.billData.billSharings.filter(
-        bs => bs.sharer.id !== this.$store.state.userInfo.id
-      );
 
       this.selectedBillSharers = [
         ...this.billData.billSharings.map(s => {
           return {
-            sharer: {
-              id: s.sharer.id,
-              username: s.sharer.username
-            },
-            amount: s.amount
+            id: s.sharer.id,
+            username: s.sharer.username
           };
         })
       ];

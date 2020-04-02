@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getInstance } from "../auth/index";
 
 export default {
     getBillPurposes() {
@@ -13,8 +14,15 @@ export default {
         return axios.put(`${process.env.VUE_APP_GatewayApiUrl}/bill/${billId}`, bill);
     },
 
-    getBill(id) {
-        return axios.get(`${process.env.VUE_APP_Backend}/bills/${id}`);
+    async getBill(id) {
+        const authService = getInstance();
+        const accessToken = await authService.getTokenSilently();
+        const config = {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        };
+        return axios.get(`${process.env.VUE_APP_Backend}/bills/${id}`, config);
     },
 
     getBills(count) {
