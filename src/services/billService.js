@@ -18,7 +18,7 @@ export default {
         Authorization: `Bearer ${accessToken}`
       }
     };
-    return axios.patch(`${process.env.VUE_APP_Backend}/bills`, bill, config);
+    return axios.put(`${process.env.VUE_APP_Backend}/bills`, bill, config);
   },
 
   async getBill(id) {
