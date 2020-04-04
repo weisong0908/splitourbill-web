@@ -7,9 +7,15 @@
         </div>
         <div class="modal-card-body">
           <b-field>
-            <b-table :data="billSharerOptions" checkable :checked-rows.sync="selectedBillSharers">
+            <b-table
+              :data="billSharerOptions"
+              checkable
+              :checked-rows.sync="selectedBillSharers"
+            >
               <template slot-scope="props">
-                <b-table-column label="Name">{{ props.row.username }}</b-table-column>
+                <b-table-column label="Name">{{
+                  props.row.username
+                }}</b-table-column>
               </template>
             </b-table>
           </b-field>
@@ -21,13 +27,21 @@
     </b-modal>
     <section>
       <b-field label="Purpose">
-        <b-select placeholder="What is this bill for?" v-model="billData.billPurpose">
+        <b-select
+          placeholder="What is this bill for?"
+          v-model="billData.billPurpose"
+        >
           <optgroup
             v-for="category in purposes"
             :key="category.categoryName"
             :label="category.categoryName"
           >
-            <option v-for="option in category.options" :key="option" :value="option">{{ option }}</option>
+            <option
+              v-for="option in category.options"
+              :key="option"
+              :value="option"
+              >{{ option }}</option
+            >
           </optgroup>
         </b-select>
       </b-field>
@@ -43,7 +57,11 @@
         ></b-datepicker>
       </b-field>
       <b-field label="Select a time">
-        <b-timepicker v-model="billData.dateTime" placeholder="Click to select..." icon="clock"></b-timepicker>
+        <b-timepicker
+          v-model="billData.dateTime"
+          placeholder="Click to select..."
+          icon="clock"
+        ></b-timepicker>
       </b-field>
       <b-field label="Remarks">
         <b-input type="textarea" v-model="billData.remarks"></b-input>
@@ -54,7 +72,9 @@
       </b-field>
       <b-table :data="billData.billSharings">
         <template slot-scope="props">
-          <b-table-column label="Name">{{ props.row.sharer.username }}</b-table-column>
+          <b-table-column label="Name">{{
+            props.row.sharer.username
+          }}</b-table-column>
           <b-table-column label="Amount">
             <b-input v-model="props.row.amount" type="number"></b-input>
           </b-table-column>
@@ -64,7 +84,7 @@
             <div class="th-wrap">You will pay the balance of</div>
           </th>
           <th>
-            <div class="th-wrap">{{balanceAmount}}</div>
+            <div class="th-wrap">{{ balanceAmount }}</div>
           </th>
         </template>
       </b-table>
@@ -82,63 +102,66 @@ import userService from "../services/userService";
 
 export default {
   components: {
-    page
+    page,
   },
   data() {
     return {
       isBillSharersFormShown: false,
       purposes: [],
-      dateFormat: date => date.toLocaleDateString("en-SG"),
+      dateFormat: (date) => date.toLocaleDateString("en-SG"),
       billData: {
         id: "",
         billPurpose: "",
         totalAmount: "",
         dateTime: new Date(),
         remarks: "",
-        billSharings: []
+        billSharings: [],
       },
       billSharerOptions: [],
-      selectedBillSharers: []
+      selectedBillSharers: [],
     };
   },
   computed: {
     balanceAmount() {
       let amountPaidByOtherUsers = 0;
 
-      this.billData.billSharings.map(s => {
+      this.billData.billSharings.map((s) => {
         amountPaidByOtherUsers += Number(s.amount);
       });
 
       return this.billData.totalAmount - amountPaidByOtherUsers;
-    }
+    },
   },
   methods: {
     updateBill() {
       let billData = { ...this.billData };
-      billData.billSharings.push({
-        sharer: {
-          id: this.$store.state.userInfo.id,
-          username: this.$store.state.userInfo.username
-        },
-        amount: this.balanceAmount
-      });
+      // billData.billSharings.push({
+      //   sharer: {
+      //     id: this.$store.state.userInfo.id,
+      //     username: this.$store.state.userInfo.username
+      //   },
+      //   amount: this.balanceAmount
+      // });
 
-      alert("bill updated");
-      this.$router.push("home");
+      billService.updateBill(this.billData).then((resp) => {
+        alert("bill updated");
+        console.log("update bill", this.billData);
+      });
+      // this.$router.push("home");
     },
     openBillSharersForm() {
-      userService.getUserInfo(this.$store.state.userInfo.id).then(resp => {
+      userService.getUserInfo(this.$store.state.userInfo.id).then((resp) => {
         const friends = [
-          ...resp.data.friends.map(f => {
+          ...resp.data.friends.map((f) => {
             return {
               id: f.id,
-              username: f.username
+              username: f.username,
             };
-          })
+          }),
         ];
 
         this.billSharerOptions = friends.filter(
-          f => !this.selectedBillSharers.map(s => s.id).includes(f.id)
+          (f) => !this.selectedBillSharers.map((s) => s.id).includes(f.id)
         );
 
         this.isBillSharersFormShown = true;
@@ -147,42 +170,43 @@ export default {
     updateBillSharers() {
       this.isBillSharersFormShown = false;
 
-      this.selectedBillSharers.forEach(sbs => {
+      this.selectedBillSharers.forEach((sbs) => {
         if (
-          this.billData.billSharings.findIndex(bs => bs.sharer.id == sbs.id) ==
-          -1
+          this.billData.billSharings.findIndex(
+            (bs) => bs.sharer.id == sbs.id
+          ) == -1
         ) {
           this.billData.billSharings.push({
             sharer: {
               id: sbs.id,
-              username: sbs.username
+              username: sbs.username,
             },
-            amount: 0
+            amount: 0,
           });
         }
       });
-    }
+    },
   },
   created() {
-    billService.getBillPurposes().then(resp => {
+    billService.getBillPurposes().then((resp) => {
       this.purposes = [...resp.data];
     });
 
-    billService.getBill(this.$route.params.id).then(resp => {
+    billService.getBill(this.$route.params.id).then((resp) => {
       this.billData = {
         ...resp.data,
-        dateTime: new Date(resp.data.dateTime)
+        dateTime: new Date(resp.data.dateTime),
       };
 
       this.selectedBillSharers = [
-        ...this.billData.billSharings.map(s => {
+        ...this.billData.billSharings.map((s) => {
           return {
             id: s.sharer.id,
-            username: s.sharer.username
+            username: s.sharer.username,
           };
-        })
+        }),
       ];
     });
-  }
+  },
 };
 </script>
