@@ -2,7 +2,7 @@
   <page title="Split Our Bill">
     <p>Hi, this is the homepage, click login to begin</p>
     <b-button @click="login">
-      <span>{{isUserLoggedIn? "Log out":"Log in"}}</span>
+      <span>{{ isUserLoggedIn ? "Log out" : "Log in" }}</span>
     </b-button>
   </page>
 </template>
@@ -32,8 +32,8 @@ export default {
     updateNotification() {
       userService
         .getFriendRequests(this.$store.state.userInfo.id)
-        .then(resp => {
-          resp.data.forEach(item => {
+        .then((resp) => {
+          resp.data.forEach((item) => {
             this.$store.commit("addNotification", {
               id: item.id,
               title: "Pending friend request",

@@ -1,21 +1,28 @@
 <template>
   <page title="Friends" subtitle="Users that you can interact with">
-    <add-friend-form @friendRequestSent="notifyFriendRequestSent"></add-friend-form>
+    <add-friend-form
+      @friendRequestSent="notifyFriendRequestSent"
+    ></add-friend-form>
     <b-table :data="friends">
       <template slot-scope="props">
-        <b-table-column label="Usernames">{{props.row.username}}</b-table-column>
+        <b-table-column label="Usernames">{{
+          props.row.username
+        }}</b-table-column>
         <b-table-column label="Action">
           <b-button
             type="is-primary"
             inverted
             tag="router-link"
             :to="'friend/' + props.row.id"
-          >Detail</b-button>
+            >Detail</b-button
+          >
         </b-table-column>
       </template>
     </b-table>
     <div class="buttons">
-      <b-button type="is-primary" @click="showAddFriendForm">Add friend</b-button>
+      <b-button type="is-primary" @click="showAddFriendForm"
+        >Add friend</b-button
+      >
     </div>
   </page>
 </template>
@@ -51,7 +58,7 @@ export default {
     }
   },
   created() {
-    userService.getUserInfo(this.$store.state.userInfo.id).then(resp => {
+    userService.getUserInfo(this.$store.state.userInfo.id).then((resp) => {
       this.friends = [...resp.data.friends];
     });
   }

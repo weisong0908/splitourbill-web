@@ -1,7 +1,7 @@
 <template>
   <page title="Friend detail">
-    <p>User Id: {{friend.id}}</p>
-    <p>User name: {{friend.username}}</p>
+    <p>User Id: {{ friend.id }}</p>
+    <p>User name: {{ friend.username }}</p>
   </page>
 </template>
 
@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     displayFriendDetail(userId) {
-      userService.getUserInfo(userId).then(resp => {
+      userService.getUserInfo(userId).then((resp) => {
         this.friend = { ...resp.data };
       });
     }

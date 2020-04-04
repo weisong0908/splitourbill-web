@@ -15,42 +15,46 @@ import store from "./stores/store";
 Vue.use(VueRouter);
 
 const authGuard = (to, from, next) => {
-	const authService = getInstance();
-	const fn = async () => {
-		// If the user is authenticated, continue with the route
-		if (authService.isAuthenticated) {
-			return next();
-		}
+  const authService = getInstance();
+  const fn = async () => {
+    // If the user is authenticated, continue with the route
+    if (authService.isAuthenticated) {
+      return next();
+    }
 
-		// Otherwise, log in
-		await authService.loginWithPopup();
-		store.commit("setUserInfo", authService.user);
-		return next();
-	};
+    // Otherwise, log in
+    await authService.loginWithPopup();
+    store.commit("setUserInfo", authService.user);
+    return next();
+  };
 
-	// If loading has already finished, check our auth state using `fn()`
-	if (!authService.loading) {
-		return fn();
-	}
+  // If loading has already finished, check our auth state using `fn()`
+  if (!authService.loading) {
+    return fn();
+  }
 
-	// Watch for the loading property to change before we check isAuthenticated
-	authService.$watch("loading", loading => {
-		if (loading === false) {
-			return fn();
-		}
-	});
+  // Watch for the loading property to change before we check isAuthenticated
+  authService.$watch("loading", (loading) => {
+    if (loading === false) {
+      return fn();
+    }
+  });
 };
 
 const router = new VueRouter({
-	routes: [
-		{ name: "dashboard", path: "/dashboard", component: Dashboard },
-		{ name: "transactionDetail", path: "/detail/:transactionCode", component: TransactionDetail },
-		{ name: "addBill", path: "/bill", component: Bill },
-		{ name: "editBill", path: "/bill/:id", component: EditBill },
-		{ name: "friends", path: "/friends", component: Friends },
-		{ name: "friendDetail", path: "/friend/:userId", component: FriendDetail },
-		{ name: "home", path: "/", component: Home }
-	]
+  routes: [
+    { name: "dashboard", path: "/dashboard", component: Dashboard },
+    {
+      name: "transactionDetail",
+      path: "/detail/:transactionCode",
+      component: TransactionDetail
+    },
+    { name: "addBill", path: "/bill", component: Bill },
+    { name: "editBill", path: "/bill/:id", component: EditBill },
+    { name: "friends", path: "/friends", component: Friends },
+    { name: "friendDetail", path: "/friend/:userId", component: FriendDetail },
+    { name: "home", path: "/", component: Home }
+  ]
 });
 
 export default router;

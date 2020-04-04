@@ -12,7 +12,8 @@
                 v-for="sharerOption in billSharerOptions"
                 :key="sharerOption.id"
                 :value="sharerOption"
-              >{{sharerOption.username}}</option>
+                >{{ sharerOption.username }}</option
+              >
             </b-select>
           </b-field>
         </div>
@@ -23,18 +24,33 @@
     </b-modal>
     <form @submit.prevent="submitBill">
       <b-field label="Purpose">
-        <b-select placeholder="What is this bill for?" v-model="billData.purpose" required>
+        <b-select
+          placeholder="What is this bill for?"
+          v-model="billData.purpose"
+          required
+        >
           <optgroup
             v-for="category in purposes"
             :key="category.categoryName"
             :label="category.categoryName"
           >
-            <option v-for="option in category.options" :key="option" :value="option">{{ option }}</option>
+            <option
+              v-for="option in category.options"
+              :key="option"
+              :value="option"
+              >{{ option }}</option
+            >
           </optgroup>
         </b-select>
       </b-field>
       <b-field label="Total amount (SGD)">
-        <b-input v-model="billData.totalAmount" type="number" required min="0" step="0.01"></b-input>
+        <b-input
+          v-model="billData.totalAmount"
+          type="number"
+          required
+          min="0"
+          step="0.01"
+        ></b-input>
       </b-field>
       <b-field label="Select a date">
         <b-datepicker
@@ -64,7 +80,9 @@
       <b-field>
         <b-table :data="billData.requests">
           <template slot-scope="props">
-            <b-table-column label="Name">{{ props.row.user.username }}</b-table-column>
+            <b-table-column label="Name">{{
+              props.row.user.username
+            }}</b-table-column>
             <b-table-column label="Amount">
               <b-input v-model="props.row.amount" type="number"></b-input>
             </b-table-column>
@@ -75,13 +93,15 @@
               <div class="th-wrap">You will pay the balance of</div>
             </th>
             <th>
-              <div class="th-wrap">{{balanceAmount}}</div>
+              <div class="th-wrap">{{ balanceAmount }}</div>
             </th>
           </template>
         </b-table>
       </b-field>
       <div class="buttons">
-        <button class="button is-primary" type="submit">{{submitButtonLabel}}</button>
+        <button class="button is-primary" type="submit">
+          {{ submitButtonLabel }}
+        </button>
       </div>
     </form>
   </page>
@@ -104,7 +124,7 @@ export default {
     return {
       pageTitle: "Add a bill",
       purposes: [],
-      dateFormat: date => date.toLocaleDateString("en-SG"),
+      dateFormat: (date) => date.toLocaleDateString("en-SG"),
       isNewBill: true,
       billData: {
         id: "",
@@ -128,7 +148,7 @@ export default {
       if (this.isNewBill) {
         billService
           .addBill(this.billData)
-          .then(resp => {
+          .then((resp) => {
             this.notify({
               title: "Bill added successfully",
               message:
@@ -140,7 +160,7 @@ export default {
 
             this.$router.push({ name: "dashboard" });
           })
-          .catch(resp => {
+          .catch((resp) => {
             this.notify({
               title: "Error adding bill",
               message: "There is error adding the bill, please try again.",
@@ -150,7 +170,7 @@ export default {
       } else {
         billService
           .updateBill(this.billData.id, this.billData)
-          .then(resp => {
+          .then((resp) => {
             this.notify({
               title: "Bill updated successfully",
               message: `The bill (${this.billData.id}) has been updated`,
@@ -158,7 +178,7 @@ export default {
             });
             this.$router.push({ name: "dashboard" });
           })
-          .catch(resp => {
+          .catch((resp) => {
             this.notify({
               title: "Error updating bill",
               message: "There is error updating the bill, please try again.",
@@ -170,7 +190,7 @@ export default {
     openAddBillSharersForm() {
       this.isAddBillSharersFormShown = true;
 
-      userService.getFriends().then(resp => {
+      userService.getFriends().then((resp) => {
         this.billSharerOptions = [...resp.data];
       });
     },
@@ -178,18 +198,18 @@ export default {
       this.isAddBillSharersFormShown = false;
 
       this.billData.requests = [
-        ...this.billData.requests.filter(r => {
-          if (this.selectedBillSharers.filter(s => s.id == r.user.id)[0])
+        ...this.billData.requests.filter((r) => {
+          if (this.selectedBillSharers.filter((s) => s.id == r.user.id)[0])
             return true;
           return false;
         }),
         ...this.selectedBillSharers
-          .filter(s => {
-            if (this.billData.requests.filter(r => r.user.id == s.id)[0])
+          .filter((s) => {
+            if (this.billData.requests.filter((r) => r.user.id == s.id)[0])
               return false;
             return true;
           })
-          .map(s => {
+          .map((s) => {
             return {
               user: { id: s.id, username: s.username },
               amount: 0
@@ -202,7 +222,7 @@ export default {
     balanceAmount() {
       let amountPaidByOtherUsers = 0;
 
-      this.billData.requests.map(r => {
+      this.billData.requests.map((r) => {
         amountPaidByOtherUsers += Number(r.amount);
       });
 
@@ -216,7 +236,7 @@ export default {
     if (this.$route.params.id) {
       this.isNewBill = false;
 
-      billService.getBill(this.$route.params.id).then(resp => {
+      billService.getBill(this.$route.params.id).then((resp) => {
         this.billData = {
           ...resp.data,
           dateTime: new Date(resp.data.dateTime)
@@ -227,7 +247,7 @@ export default {
       this.isNewBill = true;
     }
 
-    billService.getBillPurposes().then(resp => {
+    billService.getBillPurposes().then((resp) => {
       this.purposes = [...resp.data];
     });
   }

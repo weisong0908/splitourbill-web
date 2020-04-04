@@ -102,7 +102,7 @@ import userService from "../services/userService";
 
 export default {
   components: {
-    page,
+    page
   },
   data() {
     return {
@@ -115,10 +115,10 @@ export default {
         totalAmount: "",
         dateTime: new Date(),
         remarks: "",
-        billSharings: [],
+        billSharings: []
       },
       billSharerOptions: [],
-      selectedBillSharers: [],
+      selectedBillSharers: []
     };
   },
   computed: {
@@ -130,7 +130,7 @@ export default {
       });
 
       return this.billData.totalAmount - amountPaidByOtherUsers;
-    },
+    }
   },
   methods: {
     updateBill() {
@@ -155,9 +155,9 @@ export default {
           ...resp.data.friends.map((f) => {
             return {
               id: f.id,
-              username: f.username,
+              username: f.username
             };
-          }),
+          })
         ];
 
         this.billSharerOptions = friends.filter(
@@ -179,13 +179,13 @@ export default {
           this.billData.billSharings.push({
             sharer: {
               id: sbs.id,
-              username: sbs.username,
+              username: sbs.username
             },
-            amount: 0,
+            amount: 0
           });
         }
       });
-    },
+    }
   },
   created() {
     billService.getBillPurposes().then((resp) => {
@@ -195,18 +195,18 @@ export default {
     billService.getBill(this.$route.params.id).then((resp) => {
       this.billData = {
         ...resp.data,
-        dateTime: new Date(resp.data.dateTime),
+        dateTime: new Date(resp.data.dateTime)
       };
 
       this.selectedBillSharers = [
         ...this.billData.billSharings.map((s) => {
           return {
             id: s.sharer.id,
-            username: s.sharer.username,
+            username: s.sharer.username
           };
-        }),
+        })
       ];
     });
-  },
+  }
 };
 </script>

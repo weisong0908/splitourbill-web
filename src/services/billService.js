@@ -15,8 +15,8 @@ export default {
     const accessToken = await authService.getTokenSilently();
     const config = {
       headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+        Authorization: `Bearer ${accessToken}`
+      }
     };
     return axios.patch(`${process.env.VUE_APP_Backend}/bills`, bill, config);
   },
@@ -26,13 +26,13 @@ export default {
     const accessToken = await authService.getTokenSilently();
     const config = {
       headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+        Authorization: `Bearer ${accessToken}`
+      }
     };
     return axios.get(`${process.env.VUE_APP_Backend}/bills/${id}`, config);
   },
 
   getBills(count) {
     return axios.get(`${process.env.VUE_APP_GatewayApiUrl}/bills/${count}`);
-  },
+  }
 };
