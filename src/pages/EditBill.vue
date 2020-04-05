@@ -134,7 +134,7 @@ export default {
   },
   methods: {
     updateBill() {
-      let billData = { ...this.billData };
+      let billData = { ...this.billData, initiatorId: this.billData.initiator.id, balanceAmount: this.balanceAmount };
       // billData.billSharings.push({
       //   sharer: {
       //     id: this.$store.state.userInfo.id,
@@ -143,9 +143,9 @@ export default {
       //   amount: this.balanceAmount
       // });
 
-      billService.updateBill(this.billData).then((resp) => {
+      billService.updateBill(billData).then((resp) => {
         alert("bill updated");
-        console.log("update bill", this.billData);
+        console.log("update bill", billData);
       });
       // this.$router.push("home");
     },
